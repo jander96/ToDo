@@ -1,4 +1,4 @@
-package com.example.todo.framework.network
+package todo.framework.network
 
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -15,13 +15,13 @@ interface ToDoApiServices {
     suspend fun createProject(@Body projectDto: ProjectDto)
 
     @GET("projects/{id}")
-    suspend fun getProjectById(@Path("id") id: String): ProjectDto
+    suspend fun getProjectById(@Path("id") idProject: String): ProjectDto
 
     @POST("projects/{id}")
-    suspend fun updateProject(@Path("id") id: String, @Body projectDto: ProjectDto)
+    suspend fun updateProject(@Path("id") idProject: String, @Body projectDto: ProjectDto)
 
     @GET("projects/{id}/collaborators")
-    suspend fun getAllProjectCollaborators(@Path("id") id: String): List<CollaboratorsDto>
+    suspend fun getAllProjectCollaborators(@Path("id") idProject: String): List<CollaboratorsDto>
 
     //Task
     @GET("api.todoist.com/rest/v2/tasks")
@@ -31,19 +31,19 @@ interface ToDoApiServices {
     suspend fun createNewTask(@Body task: TaskDto)
 
     @GET("tasks/{id}")
-    suspend fun getAnActiveTaskById()
+    suspend fun getAnActiveTaskById(@Path("id") idTask:String)
 
     @POST("tasks/{id}")
-    suspend fun updateTask(@Path("id") id: String, @Body task: TaskDto)
+    suspend fun updateTask(@Path("id") idTask: String, @Body task: TaskDto)
 
     @POST("tasks/{id}/close")
-    suspend fun closeTask(@Path("id") id: String)
+    suspend fun closeTask(@Path("id") idTask: String)
 
     @POST("tasks/{id}/reopen")
-    suspend fun reopenTask(@Path("id") id: String)
+    suspend fun reopenTask(@Path("id") idTask: String)
 
     @DELETE("/tasks/{id}")
-    suspend fun deleteTask(@Path("id") id: String)
+    suspend fun deleteTask(@Path("id") idTask: String)
 
     //Labels
 
@@ -55,13 +55,13 @@ interface ToDoApiServices {
     suspend fun createPersonalLabel(@Body label: LabelDto)
 
     @GET("labels/{id}")
-    suspend fun getPersonalLabelById(@Path("id") id: String)
+    suspend fun getPersonalLabelById(@Path("id") idLabel : String)
 
     @POST("labels/{id}")
-    suspend fun updatePersonalLabelById(@Path("id") id: String, @Body label: LabelDto)
+    suspend fun updatePersonalLabelById(@Path("id") idLabel: String, @Body label: LabelDto)
 
     @DELETE("labels/{id}")
-    suspend fun deleteLabelById(@Path("id") id: String)
+    suspend fun deleteLabelById(@Path("id") idLabel: String)
 
     // Shared Labels
     @GET("labels/shared")

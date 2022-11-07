@@ -1,9 +1,9 @@
-package com.example.todo.framework.network
+package todo.domain
 
-data class DueDto(
+data class DueDtoDomain(
     val string: String,
     val date: String,
-    val is_recurring: Boolean,
+    val isRecurring: Boolean,
     val datetime: String,
     val timezone: String
 )

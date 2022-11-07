@@ -1,4 +1,4 @@
-package com.example.todo.framework.network
+package todo.framework.network
 
 data class CollaboratorsDto(
     val id:String,

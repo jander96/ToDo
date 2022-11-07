@@ -1,4 +1,4 @@
-package com.example.todo.framework.network
+package todo.framework.network
 
 import com.squareup.moshi.Json
 
