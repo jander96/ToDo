@@ -1,8 +1,9 @@
 package todo.framework.room.entities
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
-import todo.framework.network.DueDto
+
 
 @Entity(tableName = "task_table")
 data class TaskEntity(
@@ -16,7 +17,7 @@ data class TaskEntity(
     @ColumnInfo(name = "parent_id") val parentId: String,
     val order: Int,
     val priority: Int,
-    val due: DueDto,
+    @Embedded val due: DueEmbeddeble,
     val url: String,
     @ColumnInfo(name = "comment_count") val commentCount: Int,
     @ColumnInfo(name = "created_at") val createdAt: String,
