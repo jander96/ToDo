@@ -31,7 +31,7 @@ interface ToDoApiServices {
     suspend fun createNewTask(@Body task: TaskDto)
 
     @GET("tasks/{id}")
-    suspend fun getAnActiveTaskById(@Path("id") idTask:String)
+    suspend fun getAnActiveTaskById(@Path("id") idTask:String):TaskDto
 
     @POST("tasks/{id}")
     suspend fun updateTask(@Path("id") idTask: String, @Body task: TaskDto)
@@ -55,7 +55,7 @@ interface ToDoApiServices {
     suspend fun createPersonalLabel(@Body label: LabelDto)
 
     @GET("labels/{id}")
-    suspend fun getPersonalLabelById(@Path("id") idLabel : String)
+    suspend fun getPersonalLabelById(@Path("id") idLabel : String):LabelDto
 
     @POST("labels/{id}")
     suspend fun updatePersonalLabelById(@Path("id") idLabel: String, @Body label: LabelDto)

@@ -5,9 +5,10 @@ import todo.domain.LabelDomain
 import todo.domain.NetworkResources
 import todo.domain.ProjectDomain
 import todo.domain.RenamedLabelDomain
+import todo.domain.Repo
 import todo.domain.TaskDomain
 
-class RepoImpl(private val networkResources: NetworkResources) : todo.domain.Repo {
+class RepoImpl(private val networkResources: NetworkResources) : Repo {
 
     override suspend fun getAllProjects(): List<ProjectDomain> {
         return networkResources.getAllProjects()
@@ -37,8 +38,8 @@ class RepoImpl(private val networkResources: NetworkResources) : todo.domain.Rep
         networkResources.createNewTask(task)
     }
 
-    override suspend fun getAnActiveTaskById(idTask: String) {
-        networkResources.getAnActiveTaskById(idTask)
+    override suspend fun getAnActiveTaskById(idTask: String):TaskDomain {
+       return networkResources.getAnActiveTaskById(idTask)
     }
 
     override suspend fun updateTask(idTask: String, task: TaskDomain) {
@@ -65,8 +66,8 @@ class RepoImpl(private val networkResources: NetworkResources) : todo.domain.Rep
         networkResources.createPersonalLabel(label)
     }
 
-    override suspend fun getPersonalLabelById(idLabel: String) {
-        networkResources.getPersonalLabelById(idLabel)
+    override suspend fun getPersonalLabelById(idLabel: String): LabelDomain {
+        return networkResources.getPersonalLabelById(idLabel)
     }
 
     override suspend fun updatePersonalLabelById(idLabel: String, label: LabelDomain) {

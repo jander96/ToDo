@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 
@@ -14,6 +15,7 @@ foreignKeys = [ForeignKey(
     childColumns = ["project_id"]
 )]
 )
+
 data class TaskEntity(
     @PrimaryKey val id: String,
     @ColumnInfo(name = "project_id") val projectId: String,

@@ -53,8 +53,8 @@ class NetworkResourcesImpl(private val toDoApiServices: ToDoApiServices):
         toDoApiServices.createNewTask(task.toTaskDto())
     }
 
-    override suspend fun getAnActiveTaskById(idTask:String) {
-        toDoApiServices.getAnActiveTaskById(idTask)
+    override suspend fun getAnActiveTaskById(idTask:String):TaskDomain {
+       return toDoApiServices.getAnActiveTaskById(idTask).toTaskDomain()
     }
 
     override suspend fun updateTask(idTask: String, task: TaskDomain) {
@@ -83,8 +83,8 @@ class NetworkResourcesImpl(private val toDoApiServices: ToDoApiServices):
         toDoApiServices.createPersonalLabel(label.toLabelDto())
     }
 
-    override suspend fun getPersonalLabelById(idLabel: String) {
-        toDoApiServices.getPersonalLabelById(idLabel)
+    override suspend fun getPersonalLabelById(idLabel: String):LabelDomain {
+       return toDoApiServices.getPersonalLabelById(idLabel).toLabelDomain()
     }
 
     override suspend fun updatePersonalLabelById(idLabel: String, label: LabelDomain) {

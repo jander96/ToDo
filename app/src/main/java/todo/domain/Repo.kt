@@ -21,7 +21,7 @@ interface Repo {
 
     suspend fun createNewTask(task: TaskDomain)
 
-    suspend fun getAnActiveTaskById(idTask:String)
+    suspend fun getAnActiveTaskById(idTask:String):TaskDomain
 
     suspend fun updateTask( idTask: String, task: TaskDomain)
 
@@ -38,7 +38,7 @@ interface Repo {
 
     suspend fun createPersonalLabel( label: LabelDomain)
 
-    suspend fun getPersonalLabelById( idLabel: String)
+    suspend fun getPersonalLabelById( idLabel: String): LabelDomain
 
     suspend fun updatePersonalLabelById( idLabel: String, label: LabelDomain)
 
