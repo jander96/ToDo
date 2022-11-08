@@ -2,11 +2,12 @@ package todo.framework.room.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 
 @Entity(tableName = "label_table")
 data class LabelEntity(
-    val id: String,
+    @PrimaryKey val id: String,
     val name: String,
     val color: String,
     val order: Int,
