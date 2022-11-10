@@ -13,7 +13,7 @@ foreignKeys = [ForeignKey(
     entity = ProjectEntity::class,
     parentColumns = ["id"],
     childColumns = ["project_id"]
-)]
+)], indices = [Index("project_id")]
 )
 
 data class TaskEntity(

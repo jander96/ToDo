@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+    <Button
+        android:id="@+id/crear_project"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Crear Project"/>
+    <Button
+        android:id="@+id/get_all_project"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get All Projects"/>
+    <Button
+        android:id="@+id/update_project"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update Project"/>
+    <Button
+        android:id="@+id/delete_project"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete Project"/>
+    <Button
+        android:id="@+id/crear_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Task"/>
+    <Button
+        android:id="@+id/get_all_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get All Task"/>
+    <Button
+        android:id="@+id/update_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update Task"/>
+    <Button
+        android:id="@+id/delete_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete Task"/>
+    <Button
+        android:id="@+id/crear_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create label"/>
+    <Button
+        android:id="@+id/get_all_labels"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get All labels"/>
+
+    <Button
+        android:id="@+id/delete_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete label"/>
+
+</LinearLayout>
