@@ -2,7 +2,10 @@ package todo
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -76,11 +79,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
     private fun setUpBottomSheet(){
-
         val bottomSheetBehavior = (taskBottomSheet.dialog as? BottomSheetDialog)?.behavior
         bottomSheetBehavior?.saveFlags = BottomSheetBehavior.SAVE_ALL
         bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+
         taskBottomSheet.show(supportFragmentManager,AddTaskBottomSheet.TAG)
+
+
 
     }
 }

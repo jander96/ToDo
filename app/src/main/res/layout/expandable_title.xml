@@ -11,6 +11,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Projects"
+        android:textStyle="bold"
+        android:textSize="18sp"
         android:textColor="@color/design_default_color_on_secondary"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
