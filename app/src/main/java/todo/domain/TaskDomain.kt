@@ -11,7 +11,7 @@ data class TaskDomain(
     val parentId: String,
     val order: Int,
     val priority: Int,
-    val due: DueDtoDomain,
+    val due: DueDomain,
     val url: String,
     val commentCount: Int,
     val createdAt: String,

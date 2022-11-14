@@ -1,6 +1,6 @@
 package todo.framework
 
-import todo.domain.DueDtoDomain
+import todo.domain.DueDomain
 
 data class Task(
     val id: String,
@@ -13,7 +13,7 @@ data class Task(
     val parentId: String,
     val order: Int,
     val priority: Int,
-    val due: DueDtoDomain,
+    val due: DueDomain,
     val url: String,
     val commentCount: Int,
     val createdAt: String,

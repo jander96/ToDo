@@ -2,50 +2,85 @@ package todo
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.lifecycle.lifecycleScope
-import com.example.todo.databinding.LayoutTesterBinding
-import kotlinx.coroutines.launch
-import todo.data.RepoImpl
-import todo.domain.usescases.CreateProjectUC
-import todo.domain.usescases.GetAllProjectUC
-import todo.framework.NetworkResourcesImpl
-import todo.framework.Project
-import todo.framework.network.TodoApiByRetrofit
+import android.view.View
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
+import com.example.todo.R
+import com.example.todo.databinding.ActivityMainBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import todo.framework.ui.views.AddTaskBottomSheet
+
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: LayoutTesterBinding
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
+    private lateinit var taskBottomSheet: AddTaskBottomSheet
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = LayoutTesterBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val repo =  RepoImpl(NetworkResourcesImpl(TodoApiByRetrofit.retrofitServices))
-        val project = Project(
-            "220325183",
-            "Projecto de Josias",
-            "charcoal",
-            "220325187",
-            1,
-            10,
-            isShared = false,
-            isFavorite = false,
-            isInboxProject = false,
-            isTeamInbox = false,
-            viewStyle = "list",
-            url = "https://todoist.com/showProject?id=2203306141"
+        with(binding.bottomNavigation) {
+            background = null
+            menu.getItem(2).isEnabled = false
+        }
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
+        navController = navHostFragment.navController
+        val appBarConfiguration =
+            AppBarConfiguration(setOf(R.id.inboxFragment, R.id.taskFragment, R.id.labelFragment))
+        binding.collapsingToolbar.setupWithNavController(
+            binding.toolbar,
+            navController,
+            appBarConfiguration
         )
-        binding.crearProject.setOnClickListener {
-            lifecycleScope.launch {
-                CreateProjectUC(
-                   repo
-                ).createProject(project)
+        binding.bottomNavigation.setupWithNavController(navController)
+
+        updateComponentsInNavigation()
+        taskBottomSheet = AddTaskBottomSheet()
+
+
+       binding.fab.setOnClickListener {
+          setUpBottomSheet()
+       }
+
+    }
+    private fun updateComponentsInNavigation(){
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            val background = AppCompatResources.getDrawable(this@MainActivity,R.color.background_page)
+            val colorToolbar = AppCompatResources.getDrawable(this@MainActivity,R.color.color_toolbar)
+
+            if (destination.id == R.id.settingsFragment) {
+                with(binding) {
+                    this.bottomNavigation.visibility = View.INVISIBLE
+                    this.bottomAppBar.visibility = View.INVISIBLE
+                    this.fab.visibility = View.INVISIBLE
+                    searchView.visibility=View.INVISIBLE
+
+                }
+            } else {
+                with(binding) {
+                    this.bottomNavigation.visibility = View.VISIBLE
+                    this.bottomAppBar.visibility = View.VISIBLE
+                    this.searchView.visibility = View.VISIBLE
+                    this.fab.visibility = View.VISIBLE
+                    this.appbarLayout.visibility = View.VISIBLE
+                    this.collapsingToolbar.visibility = View.VISIBLE
+
+                }
             }
         }
-        binding.getAllProject.setOnClickListener {
-            lifecycleScope.launch {
-                GetAllProjectUC(repo).getAllProjects()
-            }
-        }
+    }
+    private fun setUpBottomSheet(){
+
+        val bottomSheetBehavior = (taskBottomSheet.dialog as? BottomSheetDialog)?.behavior
+        bottomSheetBehavior?.saveFlags = BottomSheetBehavior.SAVE_ALL
+        bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        taskBottomSheet.show(supportFragmentManager,AddTaskBottomSheet.TAG)
 
     }
 }

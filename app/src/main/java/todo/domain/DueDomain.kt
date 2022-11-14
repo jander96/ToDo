@@ -1,6 +1,6 @@
 package todo.domain
 
-data class DueDtoDomain(
+data class DueDomain(
     val string: String,
     val date: String,
     val isRecurring: Boolean,

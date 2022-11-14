@@ -2,7 +2,7 @@ package todo
 
 
 import todo.domain.CollaboratorsDomain
-import todo.domain.DueDtoDomain
+import todo.domain.DueDomain
 import todo.domain.LabelDomain
 import todo.domain.ProjectDomain
 import todo.domain.RenamedLabelDomain
@@ -170,14 +170,14 @@ fun Task.toTaskDomain()=
         assignerId
     )
 fun DueDto.toDueDomain() =
-    DueDtoDomain(
+    DueDomain(
         string,
         date,
         isRecurring,
         datetime,
         timezone
     )
-fun DueDtoDomain.toDueDto()=
+fun DueDomain.toDueDto()=
     DueDto(
         string,
         date,

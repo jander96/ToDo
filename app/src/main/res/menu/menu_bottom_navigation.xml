@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+<item android:id="@+id/inboxFragment"
+    android:icon="@drawable/inbox_1inbox"
+    android:title="Inbox"
+    app:showAsAction="always"/>
+
+
+    <item
+        android:id="@+id/taskFragment"
+        android:icon="@drawable/baseline_calendar_white"
+        android:title="Task"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/place_holder"
+        android:title=""
+        app:showAsAction="always"
+        />
+    <item android:id="@+id/labelFragment"
+        android:icon="@drawable/label_1labels"
+        android:title="Tags"
+        app:showAsAction="always"/>
+
+    <item android:id="@+id/settingsFragment"
+        android:icon="@drawable/settings_1settings"
+        android:title="Settings"
+        app:showAsAction="always"/>
+</menu>
