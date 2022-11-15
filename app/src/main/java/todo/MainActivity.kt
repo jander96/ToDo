@@ -1,10 +1,13 @@
 package todo
 
+import android.app.SearchManager
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.navigation.NavController
@@ -50,6 +53,7 @@ class MainActivity : AppCompatActivity() {
        binding.fab.setOnClickListener {
           setUpBottomSheet()
        }
+        setupSearchView()
 
     }
     private fun updateComponentsInNavigation(){
@@ -85,7 +89,14 @@ class MainActivity : AppCompatActivity() {
 
         taskBottomSheet.show(supportFragmentManager,AddTaskBottomSheet.TAG)
 
-
-
+    }
+    private fun setupSearchView(){
+        binding.searchView.setOnSearchClickListener {
+            binding.collapsingToolbar.isTitleEnabled = false
+        }
+        binding.searchView.setOnCloseListener {
+            binding.collapsingToolbar.isTitleEnabled = true
+            false
+        }
     }
 }

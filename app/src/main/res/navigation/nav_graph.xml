@@ -15,9 +15,26 @@
     <fragment
         android:id="@+id/labelFragment"
         android:name="todo.framework.ui.views.LabelFragment"
-        android:label="Tags" />
+        android:label="Tags" >
+        <action
+            android:id="@+id/action_label_to_addLabel"
+            app:destination="@id/addLabelFragment"
+            app:popUpTo="@id/labelFragment"/>
+        <action
+            android:id="@+id/action_label_to_addProject"
+            app:destination="@id/addProjectFragment"
+            app:popUpTo="@id/labelFragment"/>
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="todo.framework.ui.views.SettingsFragment"
         android:label="Settings" />
+    <fragment
+        android:id="@+id/addLabelFragment"
+        android:name="todo.framework.ui.views.AddLabelFragment"
+        android:label="AddLabelFragment" />
+    <fragment
+        android:id="@+id/addProjectFragment"
+        android:name="todo.framework.ui.views.AddProjectFragment"
+        android:label="AddProjectFragment" />
 </navigation>
