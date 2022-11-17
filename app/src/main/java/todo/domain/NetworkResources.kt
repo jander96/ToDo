@@ -1,9 +1,11 @@
 package todo.domain
 
+import kotlinx.coroutines.flow.Flow
+
 interface NetworkResources {
 
     //Project
-    suspend fun getAllProjects(): List<ProjectDomain>
+    fun getAllProjects(): Flow<List<ProjectDomain>>
 
 
     suspend fun createProject( projectDto: ProjectDomain)
@@ -14,12 +16,13 @@ interface NetworkResources {
 
     suspend fun updateProject( idProject: String, projectDto: ProjectDomain)
 
+    suspend fun deleteProject(idProject: String)
 
-    suspend fun getAllProjectCollaborators( idProject: String): List<CollaboratorsDomain>
+    fun getAllProjectCollaborators( idProject: String): Flow<List<CollaboratorsDomain>>
 
     //Task
 
-    suspend fun getActiveTasks(): List<TaskDomain>
+    fun getActiveTasks(): Flow<List<TaskDomain>>
 
 
     suspend fun createNewTask(task: TaskDomain)
@@ -43,7 +46,7 @@ interface NetworkResources {
 
     //Personal labels
 
-    suspend fun getAllPersonalLabels(): List<LabelDomain>
+    fun getAllPersonalLabels(): Flow<List<LabelDomain>>
 
 
     suspend fun createPersonalLabel( label: LabelDomain)
@@ -59,11 +62,12 @@ interface NetworkResources {
 
     // Shared Labels
 
-    suspend fun getAllSharedLabels(): List<String>
+    fun getAllSharedLabels(): Flow<List<String>>
 
 
     suspend fun renameSharedLabels( renamedLabel: RenamedLabelDomain)
 
 
     suspend fun  removeSharedLabels( labelName: String)
+
 }

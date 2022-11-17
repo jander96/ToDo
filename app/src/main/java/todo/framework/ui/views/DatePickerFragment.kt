@@ -7,7 +7,7 @@ import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
 import java.util.Calendar
 
-class DatePickerFragment(val listener: (year: Int, month: Int, day: Int) -> Unit) :
+class DatePickerFragment (val listener: (year: Int, month: Int, day: Int) -> Unit) :
     DialogFragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, day: Int) {

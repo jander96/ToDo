@@ -2,8 +2,11 @@ package todo.framework
 
 
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import todo.domain.CollaboratorsDomain
 import todo.domain.LabelDomain
+import todo.domain.NetworkResources
 import todo.domain.ProjectDomain
 import todo.domain.RenamedLabelDomain
 import todo.domain.TaskDomain
@@ -16,12 +19,14 @@ import todo.toProjectDto
 import todo.toRenamedLabelDto
 import todo.toTaskDomain
 import todo.toTaskDto
+import javax.inject.Inject
 
-class NetworkResourcesImpl(private val toDoApiServices: ToDoApiServices):
-    todo.domain.NetworkResources {
-    override suspend fun getAllProjects(): List<ProjectDomain> {
-       return toDoApiServices.getAllProjects().map {
-           it.toProjectDomain()
+
+class NetworkResourcesImpl @Inject constructor ( private val toDoApiServices: ToDoApiServices):
+    NetworkResources {
+    override fun getAllProjects(): Flow<List<ProjectDomain>> {
+       return toDoApiServices.getAllProjects().map { list ->
+           list.map { it.toProjectDomain() }
        }
     }
 
@@ -37,15 +42,19 @@ class NetworkResourcesImpl(private val toDoApiServices: ToDoApiServices):
         toDoApiServices.updateProject(idProject,projectDto.toProjectDto())
     }
 
-    override suspend fun getAllProjectCollaborators(idProject: String): List<CollaboratorsDomain> {
-      return  toDoApiServices.getAllProjectCollaborators(idProject).map {
-          it.toCollaboratorsDomain()
+    override suspend fun deleteProject(idProject: String) {
+        toDoApiServices.deleteProject(idProject)
+    }
+
+    override fun getAllProjectCollaborators(idProject: String): Flow<List<CollaboratorsDomain>> {
+      return  toDoApiServices.getAllProjectCollaborators(idProject).map { list->
+          list.map{it.toCollaboratorsDomain()}
       }
     }
 
-    override suspend fun getActiveTasks(): List<TaskDomain> {
-        return toDoApiServices.getActiveTasks().map {
-            it.toTaskDomain()
+    override fun getActiveTasks(): Flow<List<TaskDomain>> {
+        return toDoApiServices.getActiveTasks().map {list->
+            list.map{it.toTaskDomain()}
         }
     }
 
@@ -73,9 +82,9 @@ class NetworkResourcesImpl(private val toDoApiServices: ToDoApiServices):
         toDoApiServices.deleteTask(idTask)
     }
 
-    override suspend fun getAllPersonalLabels(): List<LabelDomain> {
-       return toDoApiServices.getAllPersonalLabels().map {
-           it.toLabelDomain()
+    override fun getAllPersonalLabels(): Flow<List<LabelDomain>> {
+       return toDoApiServices.getAllPersonalLabels().map {list->
+           list.map{it.toLabelDomain()}
        }
     }
 
@@ -95,7 +104,7 @@ class NetworkResourcesImpl(private val toDoApiServices: ToDoApiServices):
         toDoApiServices.deleteLabelById(idLabel)
     }
 
-    override suspend fun getAllSharedLabels(): List<String> {
+    override fun getAllSharedLabels(): Flow<List<String>> {
        return toDoApiServices.getAllSharedLabels()
     }
 

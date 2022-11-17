@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -21,13 +22,24 @@ import com.example.todo.databinding.ActivityMainBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import todo.framework.network.LabelDto
+import todo.framework.network.ProjectDto
+import todo.framework.network.TaskDto
+import todo.framework.network.ToDoApiServices
 import todo.framework.ui.views.AddTaskBottomSheet
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-    private lateinit var taskBottomSheet: AddTaskBottomSheet
+   @Inject
+   lateinit var taskBottomSheet: AddTaskBottomSheet
+   @Inject
+   lateinit var retrofitToDoApiServices: ToDoApiServices
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,9 +55,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigation.setupWithNavController(navController)
 
+        val coroutineExceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+            throwable.printStackTrace()
+        }
 
-
-        taskBottomSheet = AddTaskBottomSheet()
 
 
        binding.fab.setOnClickListener {

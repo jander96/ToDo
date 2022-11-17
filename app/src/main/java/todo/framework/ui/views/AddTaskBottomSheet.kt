@@ -1,20 +1,19 @@
 package todo.framework.ui.views
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+
 import androidx.fragment.app.viewModels
 import com.example.todo.R
 import com.example.todo.databinding.CreateTaskBottonSheetBinding
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
+
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import todo.framework.ui.viewmodels.AddTaskViewModel
+import javax.inject.Inject
 
-class AddTaskBottomSheet : BottomSheetDialogFragment() {
+class AddTaskBottomSheet @Inject constructor()  : BottomSheetDialogFragment() {
     private var _binding: CreateTaskBottonSheetBinding? = null
     private val binding get() = _binding!!
 

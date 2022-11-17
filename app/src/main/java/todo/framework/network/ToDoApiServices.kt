@@ -1,5 +1,9 @@
 package todo.framework.network
 
+import kotlinx.coroutines.flow.Flow
+import okhttp3.ResponseBody
+import org.jetbrains.annotations.Nullable
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -9,7 +13,7 @@ import retrofit2.http.Path
 interface ToDoApiServices {
     //Projects
     @GET("projects")
-    suspend fun getAllProjects(): List<ProjectDto>
+    fun getAllProjects(): Flow<List<ProjectDto>>
 
     @POST("projects")
     suspend fun createProject(@Body projectDto: ProjectDto)
@@ -19,15 +23,17 @@ interface ToDoApiServices {
 
     @POST("projects/{id}")
     suspend fun updateProject(@Path("id") idProject: String, @Body projectDto: ProjectDto)
+    @DELETE("projects/{id}")
+    suspend fun deleteProject(@Path("id") idProject: String):Response<Unit>
 
     @GET("projects/{id}/collaborators")
-    suspend fun getAllProjectCollaborators(@Path("id") idProject: String): List<CollaboratorsDto>
+     fun getAllProjectCollaborators(@Path("id") idProject: String): Flow<List<CollaboratorsDto>>
 
     //Task
-    @GET("api.todoist.com/rest/v2/tasks")
-    suspend fun getActiveTasks(): List<TaskDto>
+    @GET("tasks")
+    fun getActiveTasks(): Flow<List<TaskDto>>
 
-    @POST
+    @POST("tasks")
     suspend fun createNewTask(@Body task: TaskDto)
 
     @GET("tasks/{id}")
@@ -43,13 +49,13 @@ interface ToDoApiServices {
     suspend fun reopenTask(@Path("id") idTask: String)
 
     @DELETE("/tasks/{id}")
-    suspend fun deleteTask(@Path("id") idTask: String)
+    suspend fun deleteTask(@Path("id") idTask: String):Response<Unit>
 
     //Labels
 
     //Personal labels
     @GET("labels")
-    suspend fun getAllPersonalLabels(): List<LabelDto>
+     fun getAllPersonalLabels(): Flow<List<LabelDto>>
 
     @POST("labels")
     suspend fun createPersonalLabel(@Body label: LabelDto)
@@ -61,11 +67,11 @@ interface ToDoApiServices {
     suspend fun updatePersonalLabelById(@Path("id") idLabel: String, @Body label: LabelDto)
 
     @DELETE("labels/{id}")
-    suspend fun deleteLabelById(@Path("id") idLabel: String)
+    suspend fun deleteLabelById(@Path("id") idLabel: String):Response<Unit>
 
     // Shared Labels
     @GET("labels/shared")
-    suspend fun getAllSharedLabels(): List<String>
+    fun getAllSharedLabels(): Flow<List<String>>
 
     @POST("labels/shared/rename")
     suspend fun renameSharedLabels(@Body renamedLabel: RenamedLabelDto)

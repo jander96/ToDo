@@ -1,12 +1,13 @@
 package todo.domain
 
+import kotlinx.coroutines.flow.Flow
 
 
 
 interface Repo {
 
     //Project
-    suspend fun getAllProjects(): List<ProjectDomain>
+    fun getAllProjects(): Flow<List<ProjectDomain>>
 
     suspend fun createProject( projectDomain: ProjectDomain)
 
@@ -14,10 +15,11 @@ interface Repo {
 
     suspend fun updateProject( idProject: String, projectDomain: ProjectDomain)
 
-    suspend fun getAllProjectCollaborators( idProject: String): List<CollaboratorsDomain>
+    suspend fun deleteProject(idProject: String)
+    fun getAllProjectCollaborators( idProject: String): Flow<List<CollaboratorsDomain>>
     //Task
 
-    suspend fun getActiveTasks(): List<TaskDomain>
+    fun getActiveTasks(): Flow<List<TaskDomain>>
 
     suspend fun createNewTask(task: TaskDomain)
 
@@ -34,7 +36,7 @@ interface Repo {
     //Labels
 
     //Personal labels
-    suspend fun getAllPersonalLabels(): List<LabelDomain>
+    fun getAllPersonalLabels(): Flow<List<LabelDomain>>
 
     suspend fun createPersonalLabel( label: LabelDomain)
 
@@ -45,7 +47,7 @@ interface Repo {
     suspend fun deleteLabelById( idLabel: String)
 
     // Shared Labels
-    suspend fun getAllSharedLabels(): List<String>
+    fun getAllSharedLabels(): Flow<List<String>>
 
     suspend fun renameSharedLabels( renamedLabelDomain: RenamedLabelDomain)
 

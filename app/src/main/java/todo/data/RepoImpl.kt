@@ -1,5 +1,6 @@
 package todo.data
 
+import kotlinx.coroutines.flow.Flow
 import todo.domain.CollaboratorsDomain
 import todo.domain.LabelDomain
 import todo.domain.NetworkResources
@@ -7,10 +8,12 @@ import todo.domain.ProjectDomain
 import todo.domain.RenamedLabelDomain
 import todo.domain.Repo
 import todo.domain.TaskDomain
+import javax.inject.Inject
 
-class RepoImpl(private val networkResources: NetworkResources) : Repo {
+class RepoImpl
+    @Inject constructor (private val networkResources: NetworkResources) : Repo {
 
-    override suspend fun getAllProjects(): List<ProjectDomain> {
+    override fun getAllProjects(): Flow<List<ProjectDomain>> {
         return networkResources.getAllProjects()
     }
 
@@ -26,11 +29,15 @@ class RepoImpl(private val networkResources: NetworkResources) : Repo {
         networkResources.updateProject(idProject, projectDomain)
     }
 
-    override suspend fun getAllProjectCollaborators(idProject: String): List<CollaboratorsDomain> {
+    override suspend fun deleteProject(idProject: String) {
+        networkResources.deleteProject(idProject)
+    }
+
+    override fun getAllProjectCollaborators(idProject: String): Flow<List<CollaboratorsDomain>> {
         return networkResources.getAllProjectCollaborators(idProject)
     }
 
-    override suspend fun getActiveTasks(): List<TaskDomain> {
+    override fun getActiveTasks(): Flow<List<TaskDomain>> {
         return networkResources.getActiveTasks()
     }
 
@@ -58,7 +65,7 @@ class RepoImpl(private val networkResources: NetworkResources) : Repo {
         networkResources.deleteTask(idTask)
     }
 
-    override suspend fun getAllPersonalLabels(): List<LabelDomain> {
+    override  fun getAllPersonalLabels(): Flow<List<LabelDomain>> {
         return networkResources.getAllPersonalLabels()
     }
 
@@ -78,7 +85,7 @@ class RepoImpl(private val networkResources: NetworkResources) : Repo {
         networkResources.deleteLabelById(idLabel)
     }
 
-    override suspend fun getAllSharedLabels(): List<String> {
+    override fun getAllSharedLabels(): Flow<List<String>> {
         return networkResources.getAllSharedLabels()
     }
 

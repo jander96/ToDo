@@ -1,9 +1,10 @@
 package todo.domain.usescases
 
+import kotlinx.coroutines.flow.Flow
 import todo.domain.Repo
 
 class GetAllSharedLabelUC(private val repo:Repo) {
-    suspend fun getAllSharedLabels():List<String>{
+    fun getAllSharedLabels(): Flow<List<String>> {
         return repo.getAllSharedLabels()
     }
 }
