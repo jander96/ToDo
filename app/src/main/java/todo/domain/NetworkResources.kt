@@ -22,7 +22,7 @@ interface NetworkResources {
 
     //Task
 
-    fun getActiveTasks(): Flow<List<TaskDomain>>
+    suspend fun getActiveTasks(): List<TaskDomain>
 
 
     suspend fun createNewTask(task: TaskDomain)

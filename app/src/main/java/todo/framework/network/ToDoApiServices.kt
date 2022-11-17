@@ -31,7 +31,7 @@ interface ToDoApiServices {
 
     //Task
     @GET("tasks")
-    fun getActiveTasks(): Flow<List<TaskDto>>
+    suspend fun getActiveTasks(): List<TaskDto>
 
     @POST("tasks")
     suspend fun createNewTask(@Body task: TaskDto)

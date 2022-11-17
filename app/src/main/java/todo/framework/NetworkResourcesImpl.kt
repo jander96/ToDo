@@ -52,9 +52,9 @@ class NetworkResourcesImpl @Inject constructor ( private val toDoApiServices: To
       }
     }
 
-    override fun getActiveTasks(): Flow<List<TaskDomain>> {
-        return toDoApiServices.getActiveTasks().map {list->
-            list.map{it.toTaskDomain()}
+    override suspend fun getActiveTasks(): List<TaskDomain> {
+        return toDoApiServices.getActiveTasks().map {
+            it.toTaskDomain()
         }
     }
 

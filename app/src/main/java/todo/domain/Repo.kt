@@ -19,7 +19,7 @@ interface Repo {
     fun getAllProjectCollaborators( idProject: String): Flow<List<CollaboratorsDomain>>
     //Task
 
-    fun getActiveTasks(): Flow<List<TaskDomain>>
+   suspend fun getActiveTasks(): List<TaskDomain>
 
     suspend fun createNewTask(task: TaskDomain)
 

@@ -10,8 +10,7 @@ import todo.domain.Repo
 import todo.domain.TaskDomain
 import javax.inject.Inject
 
-class RepoImpl
-    @Inject constructor (private val networkResources: NetworkResources) : Repo {
+class RepoImpl @Inject constructor (private val networkResources: NetworkResources) : Repo {
 
     override fun getAllProjects(): Flow<List<ProjectDomain>> {
         return networkResources.getAllProjects()
@@ -37,7 +36,7 @@ class RepoImpl
         return networkResources.getAllProjectCollaborators(idProject)
     }
 
-    override fun getActiveTasks(): Flow<List<TaskDomain>> {
+    override suspend fun getActiveTasks(): List<TaskDomain> {
         return networkResources.getActiveTasks()
     }
 
