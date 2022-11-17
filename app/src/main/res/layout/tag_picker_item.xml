@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="4dp">
+    <ImageView
+        android:id="@+id/iv_label"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/label_svgrepo_com"/>
+    <TextView
+        android:id="@+id/tv_label_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Projecto_familia"
+        android:layout_marginStart="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"/>
+
+
+</LinearLayout>

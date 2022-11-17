@@ -8,8 +8,6 @@ import com.example.todo.databinding.TaskPageBinding
 
 class TaskAdapter(private val lista: List<String>): RecyclerView.Adapter<TaskAdapter.TaskViewHolder>(){
 
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
        return TaskViewHolder(
             TaskPageBinding.inflate(

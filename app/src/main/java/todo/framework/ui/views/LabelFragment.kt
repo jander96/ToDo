@@ -8,6 +8,8 @@ import android.widget.ListAdapter
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.example.todo.R
 import com.example.todo.databinding.LabelPageBinding
 import todo.framework.ui.adapters.ProjectLabelsExpanableAdapter
@@ -21,6 +23,9 @@ class LabelFragment: Fragment(R.layout.label_page) {
         super.onViewCreated(view, savedInstanceState)
         _binding = LabelPageBinding.bind(view)
         navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.inboxFragment, R.id.taskFragment, R.id.labelFragment))
+        binding.toolbar.setupWithNavController(navController,appBarConfiguration)
+        binding.toolbar.inflateMenu(R.menu.main_menu)
        setupExpnableListView()
 
 
@@ -51,6 +56,11 @@ class LabelFragment: Fragment(R.layout.label_page) {
             titleList[1] to listOf(" Tag1","tag 2","tag 3","Tag 4","Tag 5"))
         val adapter = ProjectLabelsExpanableAdapter(requireContext(),titleList,map)
         expanableListView.setAdapter(adapter)
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 
 

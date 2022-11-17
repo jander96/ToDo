@@ -32,9 +32,10 @@
     <fragment
         android:id="@+id/addLabelFragment"
         android:name="todo.framework.ui.views.AddLabelFragment"
-        android:label="AddLabelFragment" />
+        android:label="New Tag" />
     <fragment
         android:id="@+id/addProjectFragment"
         android:name="todo.framework.ui.views.AddProjectFragment"
-        android:label="AddProjectFragment" />
+        android:label="New Project" />
+
 </navigation>
