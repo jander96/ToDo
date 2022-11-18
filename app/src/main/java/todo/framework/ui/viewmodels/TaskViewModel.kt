@@ -29,7 +29,6 @@ class TaskViewModel @Inject constructor (private val repo: Repo): ViewModel() {
 
     }
 
-
      private var _listaTask=MutableLiveData<List<Task>>()
     val listaTask:LiveData<List<Task>> get() = _listaTask
 

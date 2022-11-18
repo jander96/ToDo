@@ -7,7 +7,7 @@ import todo.framework.Task
 import todo.toTask
 import javax.inject.Inject
 
-class GetActiveTaskUC @Inject constructor (private val repo: Repo) {
+class GetActiveTaskUC  (private val repo: Repo) {
    suspend fun getActiveTask(): List<Task> {
        return repo.getActiveTasks().map {
            it.toTask()

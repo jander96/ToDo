@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 class NetworkResourcesImpl @Inject constructor ( private val toDoApiServices: ToDoApiServices):
     NetworkResources {
-    override fun getAllProjects(): List<ProjectDomain>{
+    override suspend fun getAllProjects(): List<ProjectDomain>{
        return toDoApiServices.getAllProjects().map {
             it.toProjectDomain()
        }
@@ -46,7 +46,7 @@ class NetworkResourcesImpl @Inject constructor ( private val toDoApiServices: To
         toDoApiServices.deleteProject(idProject)
     }
 
-    override fun getAllProjectCollaborators(idProject: String): List<CollaboratorsDomain> {
+    override suspend fun getAllProjectCollaborators(idProject: String): List<CollaboratorsDomain> {
       return  toDoApiServices.getAllProjectCollaborators(idProject).map {
           it.toCollaboratorsDomain()
       }
@@ -82,7 +82,7 @@ class NetworkResourcesImpl @Inject constructor ( private val toDoApiServices: To
         toDoApiServices.deleteTask(idTask)
     }
 
-    override fun getAllPersonalLabels(): List<LabelDomain>{
+    override suspend fun getAllPersonalLabels(): List<LabelDomain>{
        return toDoApiServices.getAllPersonalLabels().map {
            it.toLabelDomain()
        }
@@ -104,7 +104,7 @@ class NetworkResourcesImpl @Inject constructor ( private val toDoApiServices: To
         toDoApiServices.deleteLabelById(idLabel)
     }
 
-    override fun getAllSharedLabels(): List<String> {
+    override suspend fun getAllSharedLabels(): List<String> {
        return toDoApiServices.getAllSharedLabels()
     }
 

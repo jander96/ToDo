@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class RepoImpl @Inject constructor (private val networkResources: NetworkResources) : Repo {
 
-    override fun getAllProjects(): Flow<List<ProjectDomain>> {
+    override suspend fun getAllProjects(): List<ProjectDomain> {
         return networkResources.getAllProjects()
     }
 
@@ -32,7 +32,7 @@ class RepoImpl @Inject constructor (private val networkResources: NetworkResourc
         networkResources.deleteProject(idProject)
     }
 
-    override fun getAllProjectCollaborators(idProject: String): Flow<List<CollaboratorsDomain>> {
+    override suspend fun getAllProjectCollaborators(idProject: String): List<CollaboratorsDomain>{
         return networkResources.getAllProjectCollaborators(idProject)
     }
 
@@ -64,7 +64,7 @@ class RepoImpl @Inject constructor (private val networkResources: NetworkResourc
         networkResources.deleteTask(idTask)
     }
 
-    override  fun getAllPersonalLabels(): Flow<List<LabelDomain>> {
+    override suspend fun getAllPersonalLabels(): List<LabelDomain>{
         return networkResources.getAllPersonalLabels()
     }
 
@@ -84,7 +84,7 @@ class RepoImpl @Inject constructor (private val networkResources: NetworkResourc
         networkResources.deleteLabelById(idLabel)
     }
 
-    override fun getAllSharedLabels(): Flow<List<String>> {
+    override suspend fun getAllSharedLabels(): List<String> {
         return networkResources.getAllSharedLabels()
     }
 

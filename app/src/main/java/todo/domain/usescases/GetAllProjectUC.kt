@@ -5,11 +5,12 @@ import kotlinx.coroutines.flow.map
 import todo.domain.Repo
 import todo.framework.Project
 import todo.toProject
+import javax.inject.Inject
 
-class GetAllProjectUC(private val repo: Repo) {
-    fun getAllProjects(): Flow<List<Project>> {
-       return repo.getAllProjects().map {list->
-           list.map{it.toProject()}
+class GetAllProjectUC (private val repo: Repo) {
+    suspend fun getAllProjects(): List<Project> {
+       return repo.getAllProjects().map {
+          it.toProject()
        }
     }
 }
