@@ -13,17 +13,13 @@ import todo.domain.Repo
 import todo.framework.NetworkResourcesImpl
 
 @Module
-@InstallIn(SingletonComponent::class)
-class ViewModelModule {
-    @Provides
+@InstallIn(ViewModelComponent::class)
+abstract class ViewModelModule {
+    @Binds
+    @ViewModelScoped
+    abstract fun bindRepo(repoImpl: RepoImpl): Repo
 
-    fun bindRepo(repoImpl: RepoImpl): Repo{
-        return repoImpl
-    }
-
-    @Provides
-
-     fun bindNetworkResource(networkResourcesImpl: NetworkResourcesImpl): NetworkResources{
-         return networkResourcesImpl
-     }
+    @Binds
+    @ViewModelScoped
+     abstract fun bindNetworkResource(networkResourcesImpl: NetworkResourcesImpl): NetworkResources
 }

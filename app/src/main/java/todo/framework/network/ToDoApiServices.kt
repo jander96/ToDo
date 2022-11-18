@@ -13,7 +13,7 @@ import retrofit2.http.Path
 interface ToDoApiServices {
     //Projects
     @GET("projects")
-    fun getAllProjects(): Flow<List<ProjectDto>>
+    fun getAllProjects(): List<ProjectDto>
 
     @POST("projects")
     suspend fun createProject(@Body projectDto: ProjectDto)
@@ -27,7 +27,7 @@ interface ToDoApiServices {
     suspend fun deleteProject(@Path("id") idProject: String):Response<Unit>
 
     @GET("projects/{id}/collaborators")
-     fun getAllProjectCollaborators(@Path("id") idProject: String): Flow<List<CollaboratorsDto>>
+     fun getAllProjectCollaborators(@Path("id") idProject: String): List<CollaboratorsDto>
 
     //Task
     @GET("tasks")
@@ -55,7 +55,7 @@ interface ToDoApiServices {
 
     //Personal labels
     @GET("labels")
-     fun getAllPersonalLabels(): Flow<List<LabelDto>>
+     fun getAllPersonalLabels(): List<LabelDto>
 
     @POST("labels")
     suspend fun createPersonalLabel(@Body label: LabelDto)
@@ -71,7 +71,7 @@ interface ToDoApiServices {
 
     // Shared Labels
     @GET("labels/shared")
-    fun getAllSharedLabels(): Flow<List<String>>
+    fun getAllSharedLabels(): List<String>
 
     @POST("labels/shared/rename")
     suspend fun renameSharedLabels(@Body renamedLabel: RenamedLabelDto)

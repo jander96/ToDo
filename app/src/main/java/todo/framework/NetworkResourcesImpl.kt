@@ -24,9 +24,9 @@ import javax.inject.Inject
 
 class NetworkResourcesImpl @Inject constructor ( private val toDoApiServices: ToDoApiServices):
     NetworkResources {
-    override fun getAllProjects(): Flow<List<ProjectDomain>> {
-       return toDoApiServices.getAllProjects().map { list ->
-           list.map { it.toProjectDomain() }
+    override fun getAllProjects(): List<ProjectDomain>{
+       return toDoApiServices.getAllProjects().map {
+            it.toProjectDomain()
        }
     }
 
@@ -46,9 +46,9 @@ class NetworkResourcesImpl @Inject constructor ( private val toDoApiServices: To
         toDoApiServices.deleteProject(idProject)
     }
 
-    override fun getAllProjectCollaborators(idProject: String): Flow<List<CollaboratorsDomain>> {
-      return  toDoApiServices.getAllProjectCollaborators(idProject).map { list->
-          list.map{it.toCollaboratorsDomain()}
+    override fun getAllProjectCollaborators(idProject: String): List<CollaboratorsDomain> {
+      return  toDoApiServices.getAllProjectCollaborators(idProject).map {
+          it.toCollaboratorsDomain()
       }
     }
 
@@ -82,9 +82,9 @@ class NetworkResourcesImpl @Inject constructor ( private val toDoApiServices: To
         toDoApiServices.deleteTask(idTask)
     }
 
-    override fun getAllPersonalLabels(): Flow<List<LabelDomain>> {
-       return toDoApiServices.getAllPersonalLabels().map {list->
-           list.map{it.toLabelDomain()}
+    override fun getAllPersonalLabels(): List<LabelDomain>{
+       return toDoApiServices.getAllPersonalLabels().map {
+           it.toLabelDomain()
        }
     }
 
@@ -104,7 +104,7 @@ class NetworkResourcesImpl @Inject constructor ( private val toDoApiServices: To
         toDoApiServices.deleteLabelById(idLabel)
     }
 
-    override fun getAllSharedLabels(): Flow<List<String>> {
+    override fun getAllSharedLabels(): List<String> {
        return toDoApiServices.getAllSharedLabels()
     }
 

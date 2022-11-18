@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 interface NetworkResources {
 
     //Project
-    fun getAllProjects(): Flow<List<ProjectDomain>>
+    fun getAllProjects(): List<ProjectDomain>
 
 
     suspend fun createProject( projectDto: ProjectDomain)
@@ -18,7 +18,7 @@ interface NetworkResources {
 
     suspend fun deleteProject(idProject: String)
 
-    fun getAllProjectCollaborators( idProject: String): Flow<List<CollaboratorsDomain>>
+    fun getAllProjectCollaborators( idProject: String): List<CollaboratorsDomain>
 
     //Task
 
@@ -46,7 +46,7 @@ interface NetworkResources {
 
     //Personal labels
 
-    fun getAllPersonalLabels(): Flow<List<LabelDomain>>
+    fun getAllPersonalLabels(): List<LabelDomain>
 
 
     suspend fun createPersonalLabel( label: LabelDomain)
@@ -62,7 +62,7 @@ interface NetworkResources {
 
     // Shared Labels
 
-    fun getAllSharedLabels(): Flow<List<String>>
+    fun getAllSharedLabels(): List<String>
 
 
     suspend fun renameSharedLabels( renamedLabel: RenamedLabelDomain)
