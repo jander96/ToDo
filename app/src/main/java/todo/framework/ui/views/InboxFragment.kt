@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -13,13 +14,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.R
 import com.example.todo.databinding.InboxPageBinding
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import todo.framework.room.TodoDataBase
 import todo.framework.ui.adapters.TaskIboxAdapter
-
+import javax.inject.Inject
+@AndroidEntryPoint
 class InboxFragment: Fragment(R.layout.inbox_page) {
     private  var _binding:InboxPageBinding? = null
     private val binding get() = _binding!!
     private lateinit var recyclerView: RecyclerView
     private lateinit var navController: NavController
+    @Inject
+    lateinit var database : TodoDataBase
 
     private val listaTestAdapter = listOf("Hacer tiempo para descansar ", "Tomar el sol","Terminar de hacer esta app,"
     ,"Seguir estudiando Lagoritmos","Estudiar el libro en Ingles de Android","Estudiar Ingles","Aprender JEtPackCompose",
@@ -47,6 +55,9 @@ class InboxFragment: Fragment(R.layout.inbox_page) {
         )
         binding.toolbar.setupWithNavController(navController)
         binding.toolbar.inflateMenu(R.menu.main_menu)
+
+
+
 
 
     }

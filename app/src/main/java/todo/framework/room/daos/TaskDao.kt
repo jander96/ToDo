@@ -16,7 +16,7 @@ interface TaskDao {
     suspend fun createNewTask( task: TaskEntity)
 
     @Query("SELECT * FROM task_table WHERE id = :idTask")
-    suspend fun getAnActiveTaskById( idTask:String)
+    suspend fun getAnActiveTaskById( idTask:String):TaskEntity
 
     @Update
     suspend fun updateTask(task: TaskEntity)
@@ -25,9 +25,5 @@ interface TaskDao {
     suspend fun deleteTask(task: TaskEntity )
 
 
-   /* suspend fun closeTask(@Path("id") idTask: String)
 
-    suspend fun reopenTask(@Path("id") idTask: String)
-
-    */
 }

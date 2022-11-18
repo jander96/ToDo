@@ -4,8 +4,10 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import todo.framework.room.entities.LabelEntity
+import todo.framework.room.entities.LabelWithTasks
 
 @Dao
 interface LabelDao {
@@ -19,7 +21,7 @@ interface LabelDao {
     suspend fun createPersonalLabel( label: LabelEntity)
 
     @Query("SELECT * FROM label_table WHERE id = :idLabel")
-    suspend fun getPersonalLabelById( idLabel : String)
+    suspend fun getPersonalLabelById( idLabel : String):LabelEntity
 
     @Update
     suspend fun updatePersonalLabel( label: LabelEntity)

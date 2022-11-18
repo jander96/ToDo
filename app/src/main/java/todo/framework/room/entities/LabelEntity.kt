@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 data class LabelEntity(
     @PrimaryKey val id: String,
     val name: String,
-    val color: String,
-    val order: Int,
-    @ColumnInfo(name = "is_favorite") val isFavorite: Boolean
+    val color: String?,
+    val order: Int?,
+    @ColumnInfo(name = "is_favorite") val isFavorite: Boolean?
 )

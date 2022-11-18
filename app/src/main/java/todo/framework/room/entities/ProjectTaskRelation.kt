@@ -4,13 +4,15 @@ import androidx.room.Embedded
 import androidx.room.Relation
 
 
-data class ProjectTaskEntity(
+data class ProjectTaskRelation(
+
     @Embedded
-    val projectEntity: ProjectEntity,
+    val project : ProjectEntity,
 
     @Relation(
         parentColumn = "id",
         entityColumn = "project_id"
     )
-    val taskEntity: List<TaskEntity>
+    val task : List<TaskEntity>
 )
+
