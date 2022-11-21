@@ -1,12 +1,13 @@
 package todo.framework.room.daos
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 import todo.framework.room.entities.ProjectEntity
-import todo.framework.room.entities.ProjectTaskRelation
 
 @Dao
 
@@ -15,10 +16,10 @@ interface ProjectDao {
 
     //Projects
     @Query("SELECT * FROM project_table")
-    suspend fun getAllProjects(): List<ProjectEntity>
+    fun getAllProjects(): Flow<List<ProjectEntity>>
 
-    @Insert
-    suspend fun createProject( projectEntity: ProjectEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun createProject( vararg projectEntity: ProjectEntity)
 
     @Query("SELECT * FROM project_table WHERE id = :idProject")
     suspend fun getProjectById( idProject: String): ProjectEntity
@@ -26,6 +27,8 @@ interface ProjectDao {
     @Update
     suspend fun updateProject( projectEntity: ProjectEntity)
 
-   /* @Query("SELECT * FROM project_table ")
-    suspend fun getAllProjectCollaborators(@Path("id") idProject: String): List<CollaboratorsDto>*/
+   @Query("DELETE FROM project_table WHERE id = :idProject")
+   suspend fun deleteProject(idProject : String)
+   @Query("DELETE FROM project_table")
+   suspend fun clearAllProjectInDB()
 }

@@ -3,16 +3,18 @@ package todo.framework.room.daos
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 import todo.framework.room.entities.TaskEntity
 
 @Dao
 interface TaskDao {
     @Query("SELECT * FROM task_table")
-    suspend fun getActiveTasks(): List<TaskEntity>
+    fun getActiveTasks(): Flow<List<TaskEntity>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun createNewTask( task: TaskEntity)
 
     @Query("SELECT * FROM task_table WHERE id = :idTask")
@@ -21,8 +23,11 @@ interface TaskDao {
     @Update
     suspend fun updateTask(task: TaskEntity)
 
-    @Delete
-    suspend fun deleteTask(task: TaskEntity )
+    @Query("DELETE FROM task_table WHERE id = :idTask")
+    suspend fun deleteTask(idTask: String )
+
+    @Query("DELETE FROM task_table")
+    suspend fun clearAllTaskInDB()
 
 
 

@@ -16,13 +16,13 @@ interface ToDoApiServices {
     suspend fun getAllProjects(): List<ProjectDto>
 
     @POST("projects")
-    suspend fun createProject(@Body projectDto: ProjectDto)
+    suspend fun createProject(@Body projectDto: ProjectDto):ProjectDto
 
     @GET("projects/{id}")
     suspend fun getProjectById(@Path("id") idProject: String): ProjectDto
 
     @POST("projects/{id}")
-    suspend fun updateProject(@Path("id") idProject: String, @Body projectDto: ProjectDto)
+    suspend fun updateProject(@Path("id") idProject: String, @Body projectDto: ProjectDto):ProjectDto
     @DELETE("projects/{id}")
     suspend fun deleteProject(@Path("id") idProject: String):Response<Unit>
 
@@ -34,13 +34,13 @@ interface ToDoApiServices {
     suspend fun getActiveTasks(): List<TaskDto>
 
     @POST("tasks")
-    suspend fun createNewTask(@Body task: TaskDto)
+    suspend fun createNewTask(@Body task: TaskDto):TaskDto
 
     @GET("tasks/{id}")
     suspend fun getAnActiveTaskById(@Path("id") idTask:String):TaskDto
 
     @POST("tasks/{id}")
-    suspend fun updateTask(@Path("id") idTask: String, @Body task: TaskDto)
+    suspend fun updateTask(@Path("id") idTask: String, @Body task: TaskDto):TaskDto
 
     @POST("tasks/{id}/close")
     suspend fun closeTask(@Path("id") idTask: String)
@@ -58,13 +58,13 @@ interface ToDoApiServices {
     suspend fun getAllPersonalLabels(): List<LabelDto>
 
     @POST("labels")
-    suspend fun createPersonalLabel(@Body label: LabelDto)
+    suspend fun createPersonalLabel(@Body label: LabelDto):LabelDto
 
     @GET("labels/{id}")
     suspend fun getPersonalLabelById(@Path("id") idLabel : String):LabelDto
 
     @POST("labels/{id}")
-    suspend fun updatePersonalLabelById(@Path("id") idLabel: String, @Body label: LabelDto)
+    suspend fun updatePersonalLabelById(@Path("id") idLabel: String, @Body label: LabelDto):LabelDto
 
     @DELETE("labels/{id}")
     suspend fun deleteLabelById(@Path("id") idLabel: String):Response<Unit>

@@ -2,7 +2,6 @@ package todo.di
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,10 +10,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import todo.data.RepoImpl
-import todo.domain.NetworkResources
-import todo.domain.Repo
-import todo.framework.NetworkResourcesImpl
 import todo.framework.network.ApiInterceptor
 import todo.framework.network.ToDoApiServices
 import javax.inject.Singleton

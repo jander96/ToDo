@@ -12,15 +12,17 @@ class Converters {
         return newString
     }
     @TypeConverter
-    fun stringToArray(string:String):Array<String>{
+    fun stringToArray(string:String?):Array<String>{
         var array:Array<String> = arrayOf()
         var stringFormado = ""
-        for(caracter in string){
-            if (caracter != '/'){
-                stringFormado+=caracter
-            }else{
-                array+=stringFormado
-                stringFormado = ""
+        if (string != null) {
+            for(caracter in string){
+                if (caracter != '/'){
+                    stringFormado+=caracter
+                }else{
+                    array+=stringFormado
+                    stringFormado = ""
+                }
             }
         }
         return array

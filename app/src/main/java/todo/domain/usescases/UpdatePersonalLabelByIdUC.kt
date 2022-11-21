@@ -1,12 +1,21 @@
 package todo.domain.usescases
 
-import todo.domain.Repo
+import todo.domain.RepoLabels
 import todo.framework.Label
+import todo.toLabel
 import todo.toLabelDomain
 import javax.inject.Inject
 
-class UpdatePersonalLabelByIdUC (private val repo:Repo) {
-    suspend fun  updatePersonalLabelById(label:Label){
-        repo.updatePersonalLabelById(label.id,label.toLabelDomain())
+class UpdatePersonalLabelByIdUC @Inject constructor (private val repoLabels: RepoLabels) {
+    suspend fun  updatePersonalLabelById(label:Label):Label?{
+        val result = repoLabels.updatePersonalLabelByIdInApi(label.id,label.toLabelDomain())
+
+        return if(result != null){
+            repoLabels.updatePersonalLabelByIdInDB(result.id,result)
+            repoLabels.getPersonalLabelByIdFromDB(result.id).toLabel()
+        }else{
+            null
+        }
+
     }
 }

@@ -1,118 +1,179 @@
 package todo.framework
 
 
-
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import todo.domain.CollaboratorsDomain
 import todo.domain.LabelDomain
 import todo.domain.NetworkResources
 import todo.domain.ProjectDomain
-import todo.domain.RenamedLabelDomain
 import todo.domain.TaskDomain
 import todo.toProjectDomain
 import todo.framework.network.ToDoApiServices
-import todo.toCollaboratorsDomain
 import todo.toLabelDomain
 import todo.toLabelDto
 import todo.toProjectDto
-import todo.toRenamedLabelDto
 import todo.toTaskDomain
 import todo.toTaskDto
 import javax.inject.Inject
 
 
-class NetworkResourcesImpl @Inject constructor ( private val toDoApiServices: ToDoApiServices):
+class NetworkResourcesImpl @Inject constructor(private val toDoApiServices: ToDoApiServices) :
     NetworkResources {
-    override suspend fun getAllProjects(): List<ProjectDomain>{
-       return toDoApiServices.getAllProjects().map {
-            it.toProjectDomain()
-       }
-    }
-
-    override suspend fun createProject(projectDto: ProjectDomain) {
-        toDoApiServices.createProject(projectDto.toProjectDto())
-    }
-
-    override suspend fun getProjectById(idProject: String): ProjectDomain {
-       return toDoApiServices.getProjectById(idProject).toProjectDomain()
-    }
-
-    override suspend fun updateProject(idProject: String, projectDto: ProjectDomain) {
-        toDoApiServices.updateProject(idProject,projectDto.toProjectDto())
-    }
-
-    override suspend fun deleteProject(idProject: String) {
-        toDoApiServices.deleteProject(idProject)
-    }
-
-    override suspend fun getAllProjectCollaborators(idProject: String): List<CollaboratorsDomain> {
-      return  toDoApiServices.getAllProjectCollaborators(idProject).map {
-          it.toCollaboratorsDomain()
-      }
-    }
-
-    override suspend fun getActiveTasks(): List<TaskDomain> {
-        return toDoApiServices.getActiveTasks().map {
-            it.toTaskDomain()
+    override suspend fun getAllProjects(): List<ProjectDomain> {
+        return try {
+            toDoApiServices.getAllProjects().map {
+                it.toProjectDomain()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emptyList()
         }
     }
 
-    override suspend fun createNewTask(task: TaskDomain) {
-        toDoApiServices.createNewTask(task.toTaskDto())
+    override suspend fun createProject(projectDto: ProjectDomain): ProjectDomain? {
+       return try {
+            toDoApiServices.createProject(projectDto.toProjectDto()).toProjectDomain()
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+           null
+        }
     }
 
-    override suspend fun getAnActiveTaskById(idTask:String):TaskDomain {
-       return toDoApiServices.getAnActiveTaskById(idTask).toTaskDomain()
+    override suspend fun getProjectById(idProject: String): ProjectDomain? {
+        return try {
+            toDoApiServices.getProjectById(idProject).toProjectDomain()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 
-    override suspend fun updateTask(idTask: String, task: TaskDomain) {
-        toDoApiServices.updateTask(idTask,task.toTaskDto())
+    override suspend fun updateProject(idProject: String, projectDto: ProjectDomain): ProjectDomain? {
+       return try {
+            toDoApiServices.updateProject(idProject, projectDto.toProjectDto()).toProjectDomain()
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 
-    override suspend fun closeTask(idTask: String) {
-        toDoApiServices.closeTask(idTask)
+    override suspend fun deleteProject(idProject: String): Int {
+       return try {
+            toDoApiServices.deleteProject(idProject)
+            1
+        } catch (e: Exception) {
+            e.printStackTrace()
+            -1
+        }
     }
 
-    override suspend fun reopenTask(idTask: String) {
-        toDoApiServices.reopenTask(idTask)
+
+    override suspend fun getActiveTasks(): List<TaskDomain> {
+        return try {
+            toDoApiServices.getActiveTasks().map {
+                it.toTaskDomain()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emptyList()
+        }
     }
 
-    override suspend fun deleteTask(idTask: String) {
-        toDoApiServices.deleteTask(idTask)
+    override suspend fun createNewTask(task: TaskDomain): TaskDomain?{
+       return try {
+            toDoApiServices.createNewTask(task.toTaskDto()).toTaskDomain()
+
+        }catch (e:Exception){
+            e.printStackTrace()
+           null
+        }
     }
 
-    override suspend fun getAllPersonalLabels(): List<LabelDomain>{
-       return toDoApiServices.getAllPersonalLabels().map {
-           it.toLabelDomain()
-       }
+    override suspend fun getAnActiveTaskById(idTask: String): TaskDomain? {
+        return try {
+             toDoApiServices.getAnActiveTaskById(idTask).toTaskDomain()
+        }catch (e:Exception){
+            e.printStackTrace()
+            null
+        }
+
     }
 
-    override suspend fun createPersonalLabel(label: LabelDomain) {
-        toDoApiServices.createPersonalLabel(label.toLabelDto())
+    override suspend fun updateTask(idTask: String, task: TaskDomain): TaskDomain? {
+       return try {
+            toDoApiServices.updateTask(idTask, task.toTaskDto()).toTaskDomain()
+
+        }catch (e:Exception){
+            e.printStackTrace()
+            null
+        }
     }
 
-    override suspend fun getPersonalLabelById(idLabel: String):LabelDomain {
-       return toDoApiServices.getPersonalLabelById(idLabel).toLabelDomain()
+
+    override suspend fun deleteTask(idTask: String):Int {
+       return try {
+            toDoApiServices.deleteTask(idTask)
+           1
+        }catch (e:Exception){
+            e.printStackTrace()
+           -1
+        }
     }
 
-    override suspend fun updatePersonalLabelById(idLabel: String, label: LabelDomain) {
-        return toDoApiServices.updatePersonalLabelById(idLabel,label.toLabelDto())
+    override suspend fun getAllPersonalLabels(): List<LabelDomain> {
+        return try {
+             toDoApiServices.getAllPersonalLabels().map {
+                it.toLabelDomain()
+            }
+        }catch (e:Exception){
+            e.printStackTrace()
+            emptyList()
+        }
+
     }
 
-    override suspend fun deleteLabelById(idLabel: String) {
-        toDoApiServices.deleteLabelById(idLabel)
+    override suspend fun createPersonalLabel(label: LabelDomain): LabelDomain? {
+       return try {
+            toDoApiServices.createPersonalLabel(label.toLabelDto()).toLabelDomain()
+
+        }catch (e:Exception){
+            e.printStackTrace()
+           null
+        }
+
     }
 
-    override suspend fun getAllSharedLabels(): List<String> {
-       return toDoApiServices.getAllSharedLabels()
+    override suspend fun getPersonalLabelById(idLabel: String): LabelDomain? {
+        return try {
+             toDoApiServices.getPersonalLabelById(idLabel).toLabelDomain()
+        }catch (e:Exception){
+            e.printStackTrace()
+            null
+        }
+
     }
 
-    override suspend fun renameSharedLabels(renamedLabel: RenamedLabelDomain) {
-        toDoApiServices.renameSharedLabels(renamedLabel.toRenamedLabelDto())
+    override suspend fun updatePersonalLabelById(idLabel: String, label: LabelDomain): LabelDomain? {
+        return try {
+             toDoApiServices.updatePersonalLabelById(idLabel, label.toLabelDto()).toLabelDomain()
+
+        }catch (e:Exception){
+            e.printStackTrace()
+            null
+        }
+
     }
 
-    override suspend fun removeSharedLabels(labelName: String) {
-        toDoApiServices.removeSharedLabels(labelName)
+    override suspend fun deleteLabelById(idLabel: String):Int {
+       return try {
+            toDoApiServices.deleteLabelById(idLabel)
+           1
+        }catch (e:Exception){
+            e.printStackTrace()
+           -1
+        }
+
     }
+
+
 }

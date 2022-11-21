@@ -18,6 +18,10 @@ import todo.framework.network.LabelDto
 import todo.framework.network.ProjectDto
 import todo.framework.network.RenamedLabelDto
 import todo.framework.network.TaskDto
+import todo.framework.room.entities.DueEmbeddeble
+import todo.framework.room.entities.LabelEntity
+import todo.framework.room.entities.ProjectEntity
+import todo.framework.room.entities.TaskEntity
 
 
 fun ProjectDto.toProjectDomain() =
@@ -169,6 +173,7 @@ fun Task.toTaskDomain()=
         assigneeId,
         assignerId
     )
+
 fun DueDto.toDueDomain() =
     DueDomain(
         string,
@@ -209,6 +214,11 @@ fun Label.toLabelDomain()=
     LabelDomain(
         id, name, color, order, isFavorite
     )
+
+fun LabelDomain.toEntity()=
+    LabelEntity(
+        id, name, color, order, isFavorite
+    )
 fun RenamedLabelDomain.toRenamedLabelDto()=
     RenamedLabelDto(
         name,
@@ -217,4 +227,73 @@ fun RenamedLabelDomain.toRenamedLabelDto()=
 fun RenamedLabel.toRenamedLabelDomain()=
     RenamedLabelDomain(
         name, newName
+    )
+
+fun ProjectEntity.toDomain() =
+    ProjectDomain(
+        id = id,
+        name= name,
+        color= color,
+        parentId = null,
+        order = order,
+        commentCount = null,
+        isShared = null,
+        isFavorite = isFavorite,
+        isInboxProject = isInboxProject,
+        isTeamInbox = null,
+        viewStyle = null,
+        url = url
+    )
+fun TaskEntity.toDomain()=
+    TaskDomain(
+        id = id,
+        projectId = projectId,
+        sectionId = null,
+        content = content,
+        description = description,
+        isCompleted = isCompleted,
+        labels = labels,
+        parentId = null,
+        order = order,
+        priority = priority,
+        due = due?.toDueDomain(),
+        url = url,
+        commentCount = null,
+        createdAt = null,
+        creatorId = null,
+        assigneeId = null,
+        assignerId = null
+    )
+fun TaskDomain.toEntity() =
+    TaskEntity(
+        id = id,
+        projectId = projectId,
+        content = content,
+        description = description,
+        isCompleted = isCompleted,
+        labels = labels,
+        order = order,
+        priority = priority,
+        due= due?.toEmbeddedle(),
+        url= url
+    )
+fun DueEmbeddeble.toDueDomain()=
+    DueDomain(
+        string, date, isRecurring, datetime, timezone
+    )
+fun DueDomain.toEmbeddedle()=
+    DueEmbeddeble(
+        string, date, isRecurring, datetime, timezone
+    )
+fun LabelEntity.toDomain() =
+    LabelDomain(
+        id = id,
+        name = name,
+        color = color,
+        order = order,
+        isFavorite = isFavorite
+    )
+fun ProjectDomain.toEntity() =
+    ProjectEntity(
+        id, name, color, order, isFavorite, isInboxProject, url
     )

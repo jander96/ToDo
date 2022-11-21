@@ -3,9 +3,11 @@ package todo.framework.room.daos
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 import todo.framework.room.entities.LabelEntity
 import todo.framework.room.entities.LabelWithTasks
 
@@ -15,9 +17,9 @@ interface LabelDao {
 
     //Personal labels
     @Query("SELECT * FROM label_table")
-    suspend fun getAllPersonalLabels(): List<LabelEntity>
+    fun getAllPersonalLabels(): Flow<List<LabelEntity>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun createPersonalLabel( label: LabelEntity)
 
     @Query("SELECT * FROM label_table WHERE id = :idLabel")
@@ -26,14 +28,9 @@ interface LabelDao {
     @Update
     suspend fun updatePersonalLabel( label: LabelEntity)
 
-    @Delete
-    suspend fun deleteLabelById(label: LabelEntity)
+    @Query("DELETE FROM label_table WHERE id = :idLabel")
+    suspend fun deleteLabelById(idLabel: String)
 
-    // Shared Labels
-
-    /*suspend fun getAllSharedLabels(): List<String>
-
-    suspend fun renameSharedLabels(@Body renamedLabel: RenamedLabelDto)
-
-    suspend fun  removeSharedLabels(@Body labelName: String)*/
+    @Query("DELETE FROM label_table")
+    suspend fun clearAllLabels()
 }

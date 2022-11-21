@@ -1,6 +1,7 @@
 package todo.framework.room.entities
 
 import androidx.room.ColumnInfo
+import androidx.room.Delete
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -8,14 +9,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 
-@Entity(tableName = "task_table",
-foreignKeys = [ForeignKey(
-    entity = ProjectEntity::class,
-    parentColumns = ["id"],
-    childColumns = ["project_id"]
-)], indices = [Index("project_id")]
-)
-
+@Entity(tableName = "task_table")
 data class TaskEntity(
     @PrimaryKey val id: String,
     @ColumnInfo(name = "project_id") val projectId: String?,
