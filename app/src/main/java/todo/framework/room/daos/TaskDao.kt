@@ -14,6 +14,9 @@ interface TaskDao {
     @Query("SELECT * FROM task_table")
     fun getActiveTasks(): Flow<List<TaskEntity>>
 
+    @Query("SELECT * FROM task_table Where content Like :query ")
+    fun searchTask(query:String):Flow<List<TaskEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun createNewTask( task: TaskEntity)
 

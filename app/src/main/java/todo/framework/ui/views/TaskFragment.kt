@@ -2,6 +2,8 @@ package todo.framework.ui.views
 
 import android.os.Bundle
 import android.view.View
+import android.widget.SimpleAdapter
+import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -25,6 +27,8 @@ class TaskFragment: Fragment(R.layout.task_page) {
     private val binding get() = _binding!!
     private lateinit var navController: NavController
     private lateinit var recyclerView: RecyclerView
+    private lateinit var spinner : Spinner
+    
 
 
 
@@ -41,6 +45,7 @@ class TaskFragment: Fragment(R.layout.task_page) {
 
 
         recyclerView = binding.recyclerView
+        spinner = binding.spinner
 
         val linearLayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         val adapter = TaskAdapter()
@@ -53,6 +58,7 @@ class TaskFragment: Fragment(R.layout.task_page) {
                 adapter.submitList(it)
             }
         }
+
 
 
     }

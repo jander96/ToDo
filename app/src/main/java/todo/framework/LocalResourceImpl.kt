@@ -1,5 +1,6 @@
 package todo.framework
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import todo.domain.LabelDomain
@@ -7,6 +8,7 @@ import todo.domain.LocalResource
 import todo.domain.ProjectDomain
 import todo.domain.TaskDomain
 import todo.framework.room.TodoDataBase
+import todo.framework.room.entities.TaskEntity
 import todo.toDomain
 import todo.toEntity
 import javax.inject.Inject
@@ -18,6 +20,12 @@ class LocalResourceImpl @Inject constructor (private val database:TodoDataBase):
        return database.getProjectDao().getAllProjects().map {list->
            list.map { it.toDomain() }
        }
+    }
+
+    override fun searchTask(query: String): Flow<List<TaskEntity>> {
+        Log.d("room","Se resliza la busqueda en Base de Datos")
+        return database.getTaskDao().searchTask(query)
+
     }
 
     override suspend fun createProject(project: ProjectDomain){

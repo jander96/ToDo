@@ -1,10 +1,13 @@
 package todo.domain
 
 import kotlinx.coroutines.flow.Flow
+import todo.framework.room.entities.TaskEntity
 
 interface LocalResource {
     fun getAllProjects(): Flow<List<ProjectDomain>>
 
+
+    fun searchTask(query:String): Flow<List<TaskEntity>>
 
     suspend fun createProject( project: ProjectDomain)
 

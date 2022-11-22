@@ -2,11 +2,14 @@ package todo.framework.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.todo.databinding.RecyclerItemBinding
+import todo.framework.Task
 
-class TaskIboxAdapter(private val lista: List<String>): RecyclerView.Adapter<TaskIboxAdapter.InboxViewHolder>(){
+class TaskIboxAdapter: ListAdapter<Task,TaskIboxAdapter.InboxViewHolder>(DiffutilCallbackInboxTask){
 
 
 
@@ -20,20 +23,25 @@ class TaskIboxAdapter(private val lista: List<String>): RecyclerView.Adapter<Tas
         )
     }
 
-    override fun getItemCount(): Int {
-       return lista.size
-    }
+
 
     override fun onBindViewHolder(holder: InboxViewHolder, position: Int) {
-        holder.bind(lista[position])
+        holder.bind(getItem(position))
     }
 
 
     class InboxViewHolder(private val binding:RecyclerItemBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(string:String) {
-            binding.txtTaskTitle.text = string
+        fun bind(task: Task) {
+            binding.txtTaskTitle.text = task.content
 
         }
 
+    }
+    private object DiffutilCallbackInboxTask : DiffUtil.ItemCallback<Task>(){
+        override fun areItemsTheSame(oldItem: Task, newItem: Task)=
+            oldItem.id == newItem.id
+
+        override fun areContentsTheSame(oldItem: Task, newItem: Task)=
+            oldItem == newItem
     }
 }

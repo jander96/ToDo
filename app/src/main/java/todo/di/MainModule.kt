@@ -12,6 +12,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import todo.framework.network.ApiInterceptor
 import todo.framework.network.ToDoApiServices
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -26,6 +27,7 @@ class MainModule {
             .addInterceptor(ApiInterceptor())
             .addInterceptor(loggerBody)
             .addInterceptor(loggerHeader)
+            .callTimeout(15,TimeUnit.SECONDS)
             .build()
     }
 

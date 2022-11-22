@@ -2,23 +2,16 @@ package todo.framework.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.databinding.ProjectPickerItemBinding
+import todo.framework.Project
 
 
-class ProjectAdapter(private val lista: List<String>, private val projectPicked:(projectPicked:String)->Unit): RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder>() {
-
-   inner class ProjectViewHolder(private val binding: ProjectPickerItemBinding) : RecyclerView.ViewHolder(binding.root){
-
-        fun bind(string: String) {
-            binding.tvLabelName.text = string
-            binding.tvLabelName.setOnClickListener {
-                projectPicked(string)
-            }
-        }
+class ProjectAdapter : ListAdapter<Project,ProjectAdapter.ProjectViewHolder>(DiffUtillCallbackProjects) {
 
 
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectViewHolder {
         return ProjectViewHolder(
@@ -26,10 +19,26 @@ class ProjectAdapter(private val lista: List<String>, private val projectPicked:
         )
     }
 
-    override fun getItemCount()=lista.size
 
     override fun onBindViewHolder(holder: ProjectViewHolder, position: Int) {
-        holder.bind(lista[position])
+        holder.bind(getItem(position))
 
     }
+    class ProjectViewHolder(private val binding: ProjectPickerItemBinding) : RecyclerView.ViewHolder(binding.root){
+
+        fun bind(project :Project ) {
+            binding.tvLabelName.text = project.name
+
+        }
+
+
+    }
+}
+private object DiffUtillCallbackProjects :DiffUtil.ItemCallback<Project>(){
+    override fun areItemsTheSame(oldItem: Project, newItem: Project) =
+        oldItem.id == newItem.id
+
+
+    override fun areContentsTheSame(oldItem: Project, newItem: Project)=
+        oldItem == newItem
 }

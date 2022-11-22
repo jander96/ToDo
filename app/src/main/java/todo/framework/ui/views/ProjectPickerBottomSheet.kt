@@ -18,21 +18,13 @@ class ProjectPickerBottomSheet(private val projectPicked: (projectPicked: String
     private lateinit var recyclerView: RecyclerView
     private lateinit var navController: NavController
 
-    private val lista = listOf(
-        "Projecto_Feliz",
-        "Projecto_casi terminado",
-        "Projecto_Listo",
-        "Projecto_Bodybuilding"
-    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = ProjectPickerPageBinding.bind(view)
         navController = findNavController()
         recyclerView = binding.recyclerView
-        val adapter = ProjectAdapter(lista) { projectPicked ->
-            projectPicked(projectPicked)
-        }
+        val adapter = ProjectAdapter()
         recyclerView.adapter = adapter
         val layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)

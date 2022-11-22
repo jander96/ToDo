@@ -1,10 +1,12 @@
 package todo.domain
 
 import kotlinx.coroutines.flow.Flow
+import todo.framework.room.entities.TaskEntity
 
 interface RepoTask {
 
     suspend fun getActiveTasksFromApi(): List<TaskDomain>
+    fun searchTask(query:String): Flow<List<TaskDomain>>
      fun getActiveTasksFromDB(): Flow<List<TaskDomain>>
 
     suspend fun createNewTaskInApi(task: TaskDomain):TaskDomain?

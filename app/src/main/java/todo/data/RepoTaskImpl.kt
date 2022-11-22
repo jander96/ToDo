@@ -1,10 +1,12 @@
 package todo.data
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import todo.domain.LocalResource
 import todo.domain.NetworkResources
 import todo.domain.RepoTask
 import todo.domain.TaskDomain
+import todo.toDomain
 import javax.inject.Inject
 
 class RepoTaskImpl
@@ -14,6 +16,12 @@ class RepoTaskImpl
 ) : RepoTask {
     override suspend fun getActiveTasksFromApi(): List<TaskDomain> {
        return networkResources.getActiveTasks()
+    }
+
+    override fun searchTask(query: String): Flow<List<TaskDomain>> {
+        return localResource.searchTask(query).map {list->
+        list.map { it.toDomain() }
+        }
     }
 
     override fun getActiveTasksFromDB(): Flow<List<TaskDomain>> {
