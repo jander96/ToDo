@@ -28,18 +28,18 @@ class InboxViewModel
     private var _queryAswer = MutableStateFlow<List<Task>>(emptyList())
     val queryAswer: StateFlow<List<Task>> get() = _queryAswer
 
-    private var _query = MutableStateFlow<String>("")
+    private var _query = MutableStateFlow("")
     val query : StateFlow<String> get()= _query
 
-    private var _screenState = MutableStateFlow<ScreenState>(ScreenState.LOADING)
+    private var _screenState = MutableStateFlow(ScreenState.LOADING)
     val screenState: StateFlow<ScreenState> get()= _screenState
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
 
             getAllTaskUC.getAllTasks().collect {
-                _listOfInboxTask.value =
-                    it.filter { task -> task.projectId == null || task.projectId == "" }
+                _listOfInboxTask.value = it
+                    //it.filter { task -> task.projectId == null || task.projectId == "" }
                 setScreenState()
             }
         }

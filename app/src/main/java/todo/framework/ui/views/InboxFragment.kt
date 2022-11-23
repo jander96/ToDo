@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.R
 import com.example.todo.databinding.InboxPageBinding
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,18 +22,17 @@ import todo.framework.ui.ScreenState.*
 import todo.framework.ui.adapters.TaskIboxAdapter
 import todo.framework.ui.viewmodels.InboxViewModel
 import javax.inject.Inject
+
 @AndroidEntryPoint
-class InboxFragment: Fragment(R.layout.inbox_page) {
-    private  var _binding:InboxPageBinding? = null
+class InboxFragment : Fragment(R.layout.inbox_page) {
+    private var _binding: InboxPageBinding? = null
     private val binding get() = _binding!!
     private lateinit var recyclerView: RecyclerView
     private lateinit var navController: NavController
     @Inject
-    lateinit var database : TodoDataBase
-    private val viewModel : InboxViewModel by viewModels()
-
-    private lateinit var adapter : TaskIboxAdapter
-
+    lateinit var database: TodoDataBase
+    private val viewModel: InboxViewModel by viewModels()
+    private lateinit var adapter: TaskIboxAdapter
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,6 +40,27 @@ class InboxFragment: Fragment(R.layout.inbox_page) {
         _binding = InboxPageBinding.bind(view)
         navController = findNavController()
 
+        setupToolbar()
+        setupProgress()
+        setupRecyclerView()
+        searchViewListener()
+
+    }
+
+    private fun searchTask(query: String?) {
+        viewModel.searchTask("%$query%")
+        updateListOfTask()
+    }
+
+    private fun updateListOfTask() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.queryAswer.collect {
+                adapter.submitList(it)
+            }
+        }
+    }
+
+    private fun setupToolbar() {
         val appBarConfiguration =
             AppBarConfiguration(setOf(R.id.inboxFragment, R.id.taskFragment, R.id.labelFragment))
 
@@ -52,26 +71,11 @@ class InboxFragment: Fragment(R.layout.inbox_page) {
         )
         binding.toolbar.setupWithNavController(navController)
         //binding.toolbar.inflateMenu(R.menu.main_menu)
-        setupProgress()
+    }
 
-
-        binding.search.setOnQueryTextListener(object:androidx.appcompat.widget.SearchView.OnQueryTextListener{
-
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                searchTask(query)
-                return false
-            }
-
-            override fun onQueryTextChange(query: String?): Boolean {
-                searchTask(query)
-                return false
-            }
-
-        })
-
-
+    private fun setupRecyclerView() {
         recyclerView = binding.recyclerView
-         adapter = TaskIboxAdapter()
+        adapter = TaskIboxAdapter()
         val layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
         recyclerView.layoutManager = layoutManager
@@ -81,22 +85,8 @@ class InboxFragment: Fragment(R.layout.inbox_page) {
                 adapter.submitList(it)
             }
         }
-
     }
 
-    private fun searchTask(query:String?) {
-        viewModel.searchTask("%$query%")
-        updateListOfTask()
-
-    }
-
-    private fun updateListOfTask() {
-        lifecycleScope.launch(Dispatchers.Main){
-            viewModel.queryAswer.collect{
-                adapter.submitList(it)
-            }
-        }
-    }
     private fun setupProgress() {
         lifecycleScope.launch(Dispatchers.Main) {
             viewModel.screenState.collect { screenState ->
@@ -115,9 +105,26 @@ class InboxFragment: Fragment(R.layout.inbox_page) {
         }
     }
 
+    private fun searchViewListener() {
+        binding.search.setOnQueryTextListener(object :
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                searchTask(query)
+                return false
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                searchTask(query)
+                return false
+            }
+
+        })
+    }
+
 
     override fun onDestroy() {
-        _binding= null
+        _binding = null
         super.onDestroy()
     }
 }
