@@ -1,10 +1,12 @@
 package todo.data
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import todo.domain.LocalResource
 import todo.domain.NetworkResources
 import todo.domain.RepoTask
+import todo.domain.ResponseState
 import todo.domain.TaskDomain
 import todo.toDomain
 import javax.inject.Inject
@@ -14,21 +16,22 @@ class RepoTaskImpl
     private val localResource: LocalResource,
     private val networkResources: NetworkResources
 ) : RepoTask {
-    override suspend fun getActiveTasksFromApi(): List<TaskDomain> {
+    override suspend fun getActiveTasksFromApi(): ResponseState<List<TaskDomain>> {
        return networkResources.getActiveTasks()
     }
 
     override fun searchTask(query: String): Flow<List<TaskDomain>> {
-        return localResource.searchTask(query).map {list->
+        return localResource.searchTask(query).map{list->
         list.map { it.toDomain() }
         }
+
     }
 
     override fun getActiveTasksFromDB(): Flow<List<TaskDomain>> {
         return localResource.getActiveTasks()
     }
 
-    override suspend fun createNewTaskInApi(task: TaskDomain): TaskDomain? {
+    override suspend fun createNewTaskInApi(task: TaskDomain): ResponseState<TaskDomain?> {
         return networkResources.createNewTask(task)
     }
 
@@ -36,7 +39,7 @@ class RepoTaskImpl
        localResource.createNewTask(task)
     }
 
-    override suspend fun getAnActiveTaskByIdFromApi(idTask: String): TaskDomain? {
+    override suspend fun getAnActiveTaskByIdFromApi(idTask: String): ResponseState<TaskDomain?> {
         return networkResources.getAnActiveTaskById(idTask)
     }
 
@@ -44,7 +47,7 @@ class RepoTaskImpl
         return localResource.getAnActiveTaskById(idTask)
     }
 
-    override suspend fun updateTaskInApi(idTask: String, task: TaskDomain): TaskDomain? {
+    override suspend fun updateTaskInApi(idTask: String, task: TaskDomain): ResponseState<TaskDomain?> {
        return networkResources.updateTask(idTask,task)
     }
 
@@ -52,7 +55,7 @@ class RepoTaskImpl
         localResource.updateTask(idTask,task)
     }
 
-    override suspend fun deleteTaskInApi(idTask: String):Int {
+    override suspend fun deleteTaskInApi(idTask: String): ResponseState<Int> {
       return networkResources.deleteTask(idTask)
     }
 

@@ -2,16 +2,20 @@ package todo.framework.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.databinding.TagPickerItemBinding
+import todo.framework.Label
+import todo.framework.Project
 
-class LabelAdapter(private val lista: List<String>,private val stringPicked:(string:String)->Unit):RecyclerView.Adapter<LabelAdapter.LabelsViewHolder>() {
+class LabelAdapter(private val stringPicked:(string:String)->Unit):ListAdapter<Label,LabelAdapter.LabelsViewHolder>(DiffUtillCallbackLabels) {
 
    inner class LabelsViewHolder(private val binding:TagPickerItemBinding) :RecyclerView.ViewHolder(binding.root){
-        fun bind(string: String) {
-            binding.tvLabelName.text = string
+        fun bind(label: Label) {
+            binding.tvLabelName.text = label.name
             binding.tvLabelName.setOnClickListener {
-                stringPicked(string)
+                stringPicked(label.name)
             }
         }
 
@@ -23,10 +27,18 @@ class LabelAdapter(private val lista: List<String>,private val stringPicked:(str
         )
     }
 
-    override fun getItemCount()=lista.size
+
 
     override fun onBindViewHolder(holder: LabelsViewHolder, position: Int) {
-        holder.bind(lista[position])
+        holder.bind(getItem(position))
 
     }
+}
+private object DiffUtillCallbackLabels : DiffUtil.ItemCallback<Label>(){
+    override fun areItemsTheSame(oldItem: Label, newItem: Label): Boolean =
+        oldItem.id == newItem.id
+
+
+    override fun areContentsTheSame(oldItem: Label, newItem: Label): Boolean =
+        oldItem == newItem
 }

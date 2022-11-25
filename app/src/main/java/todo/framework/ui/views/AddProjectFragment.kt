@@ -19,7 +19,7 @@ class AddProjectFragment: Fragment(R.layout.add_project_page) {
     private var _binding: AddProjectPageBinding? = null
     private val binding get() = _binding!!
     private lateinit var navController:NavController
-    private lateinit var colorCode:String
+    private var colorCode:String? = null
     private val viewModel : AddProjectViewModel by viewModels()
     private val colorPicker = ColorPickerBottomSheet{ colorCode ->
         this.colorCode = colorCode

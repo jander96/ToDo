@@ -5,6 +5,7 @@ import todo.domain.LocalResource
 import todo.domain.NetworkResources
 import todo.domain.ProjectDomain
 import todo.domain.RepoProjects
+import todo.domain.ResponseState
 import javax.inject.Inject
 
 class RepoProjectsImpl
@@ -12,7 +13,7 @@ class RepoProjectsImpl
     private val localResource: LocalResource,
     private val networkResources: NetworkResources
 ) : RepoProjects {
-    override suspend fun getAllProjectsFromApi(): List<ProjectDomain> {
+    override suspend fun getAllProjectsFromApi(): ResponseState<List<ProjectDomain>> {
        return networkResources.getAllProjects()
     }
 
@@ -20,7 +21,7 @@ class RepoProjectsImpl
         return localResource.getAllProjects()
     }
 
-    override suspend fun createProjectInApi(projectDomain: ProjectDomain): ProjectDomain? {
+    override suspend fun createProjectInApi(projectDomain: ProjectDomain): ResponseState<ProjectDomain?> {
       return networkResources.createProject(projectDomain)
     }
 
@@ -28,15 +29,19 @@ class RepoProjectsImpl
        localResource.createProject(projectDomain)
     }
 
-    override suspend fun getProjectByIdFromApi(idProject: String): ProjectDomain? {
+    override suspend fun getProjectByIdFromApi(idProject: String): ResponseState<ProjectDomain?> {
         return networkResources.getProjectById(idProject)
     }
 
-    override suspend fun getProjectByIdFromDB(idProject: String): ProjectDomain {
+    override suspend fun getProjectByIdFromDB(idProject: String): ProjectDomain? {
         return localResource.getProjectById(idProject)
     }
 
-    override suspend fun updateProjectInApi(idProject: String, projectDomain: ProjectDomain): ProjectDomain? {
+    override suspend fun findProjectIdByName(projectName: String): String {
+        return localResource.findProjectIdByName(projectName)
+    }
+
+    override suspend fun updateProjectInApi(idProject: String, projectDomain: ProjectDomain): ResponseState<ProjectDomain?> {
        return networkResources.updateProject(idProject,projectDomain)
     }
 
@@ -44,7 +49,7 @@ class RepoProjectsImpl
        localResource.updateProject(idProject,projectDomain)
     }
 
-    override suspend fun deleteProjectInApi(idProject: String):Int{
+    override suspend fun deleteProjectInApi(idProject: String): ResponseState<Int> {
        return networkResources.deleteProject(idProject)
     }
 

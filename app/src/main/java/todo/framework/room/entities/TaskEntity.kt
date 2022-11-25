@@ -16,7 +16,7 @@ data class TaskEntity(
     val content: String,
     val description: String?,
     @ColumnInfo(name = "is_completed") val isCompleted: Boolean?,
-    val labels: Array<String>?,
+    val labels: Array<String?>?,
     val order: Int?,
     val priority: Int?,
     @Embedded val due: DueEmbeddeble?,

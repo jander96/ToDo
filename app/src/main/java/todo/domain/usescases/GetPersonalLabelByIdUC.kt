@@ -1,19 +1,21 @@
 package todo.domain.usescases
 
 import todo.domain.RepoLabels
+import todo.domain.ResponseState
 import todo.framework.Label
 import todo.toLabel
 import javax.inject.Inject
 
 class GetPersonalLabelByIdUC @Inject constructor (private val repoLabels: RepoLabels) {
-    suspend fun getPersonalLabelById(idLabel:String): Label? {
+    suspend fun getPersonalLabelById(idLabel:String): ResponseState<Label?> {
         val result = repoLabels.getPersonalLabelByIdFromApi(idLabel)
 
-        return if(result!=null){
-           repoLabels.createPersonalLabelInDB(result)
-           repoLabels.getPersonalLabelByIdFromDB(idLabel).toLabel()
+        return if(result is ResponseState.Success){
+           repoLabels.createPersonalLabelInDB(result.data!!)
+           val response =repoLabels.getPersonalLabelByIdFromDB(idLabel).toLabel()
+            ResponseState.Success(response)
         }else{
-            null
+            ResponseState.Error(result.messange)
         }
     }
 }

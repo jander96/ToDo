@@ -4,6 +4,7 @@ package todo.framework
 import todo.domain.LabelDomain
 import todo.domain.NetworkResources
 import todo.domain.ProjectDomain
+import todo.domain.ResponseState
 import todo.domain.TaskDomain
 import todo.toProjectDomain
 import todo.framework.network.ToDoApiServices
@@ -17,160 +18,166 @@ import javax.inject.Inject
 
 class NetworkResourcesImpl @Inject constructor(private val toDoApiServices: ToDoApiServices) :
     NetworkResources {
-    override suspend fun getAllProjects(): List<ProjectDomain> {
+    override suspend fun getAllProjects(): ResponseState<List<ProjectDomain>> {
+
         return try {
-            toDoApiServices.getAllProjects().map {
-                it.toProjectDomain()
-            }
+           val response= toDoApiServices.getAllProjects().map { it.toProjectDomain() }
+            ResponseState.Success(response)
         } catch (e: Exception) {
             e.printStackTrace()
-            emptyList()
+            ResponseState.Error(e.toString(), emptyList())
         }
     }
 
-    override suspend fun createProject(projectDto: ProjectDomain): ProjectDomain? {
+    override suspend fun createProject(projectDto: ProjectDomain): ResponseState<ProjectDomain?> {
        return try {
-            toDoApiServices.createProject(projectDto.toProjectDto()).toProjectDomain()
+           val response = toDoApiServices.createProject(projectDto.toProjectDto()).toProjectDomain()
+           ResponseState.Success(response)
 
         } catch (e: Exception) {
             e.printStackTrace()
-           null
+           ResponseState.Error(e.toString())
         }
     }
 
-    override suspend fun getProjectById(idProject: String): ProjectDomain? {
+    override suspend fun getProjectById(idProject: String): ResponseState<ProjectDomain?> {
         return try {
-            toDoApiServices.getProjectById(idProject).toProjectDomain()
+            val response = toDoApiServices.getProjectById(idProject).toProjectDomain()
+            ResponseState.Success(response)
         } catch (e: Exception) {
             e.printStackTrace()
-            null
+            ResponseState.Error(e.toString())
         }
     }
 
-    override suspend fun updateProject(idProject: String, projectDto: ProjectDomain): ProjectDomain? {
+    override suspend fun updateProject(idProject: String, projectDto: ProjectDomain): ResponseState<ProjectDomain?> {
        return try {
-            toDoApiServices.updateProject(idProject, projectDto.toProjectDto()).toProjectDomain()
-
+           val response = toDoApiServices.updateProject(idProject, projectDto.toProjectDto()).toProjectDomain()
+            ResponseState.Success(response)
         } catch (e: Exception) {
             e.printStackTrace()
-            null
+            ResponseState.Error(e.toString())
         }
     }
 
-    override suspend fun deleteProject(idProject: String): Int {
+    override suspend fun deleteProject(idProject: String): ResponseState<Int> {
        return try {
             toDoApiServices.deleteProject(idProject)
-            1
+            ResponseState.Success(1)
         } catch (e: Exception) {
             e.printStackTrace()
-            -1
+            ResponseState.Error(e.toString(),-1)
         }
     }
 
 
-    override suspend fun getActiveTasks(): List<TaskDomain> {
+    override suspend fun getActiveTasks(): ResponseState<List<TaskDomain>> {
         return try {
-            toDoApiServices.getActiveTasks().map {
+            val response = toDoApiServices.getActiveTasks().map {
                 it.toTaskDomain()
             }
+            ResponseState.Success(response)
         } catch (e: Exception) {
             e.printStackTrace()
-            emptyList()
+            ResponseState.Error(e.toString(), emptyList())
         }
     }
 
-    override suspend fun createNewTask(task: TaskDomain): TaskDomain?{
+    override suspend fun createNewTask(task: TaskDomain): ResponseState<TaskDomain?> {
        return try {
-            toDoApiServices.createNewTask(task.toTaskDto()).toTaskDomain()
-
+            val response = toDoApiServices.createNewTask(task.toTaskDto()).toTaskDomain()
+            ResponseState.Success(response)
         }catch (e:Exception){
             e.printStackTrace()
-           null
+           ResponseState.Error(e.toString())
         }
     }
 
-    override suspend fun getAnActiveTaskById(idTask: String): TaskDomain? {
+    override suspend fun getAnActiveTaskById(idTask: String): ResponseState<TaskDomain?> {
         return try {
-             toDoApiServices.getAnActiveTaskById(idTask).toTaskDomain()
+            val response= toDoApiServices.getAnActiveTaskById(idTask).toTaskDomain()
+            ResponseState.Success(response)
         }catch (e:Exception){
             e.printStackTrace()
-            null
+            ResponseState.Error(e.toString())
         }
 
     }
 
-    override suspend fun updateTask(idTask: String, task: TaskDomain): TaskDomain? {
+    override suspend fun updateTask(idTask: String, task: TaskDomain): ResponseState<TaskDomain?> {
        return try {
-            toDoApiServices.updateTask(idTask, task.toTaskDto()).toTaskDomain()
-
+            val response = toDoApiServices.updateTask(idTask, task.toTaskDto()).toTaskDomain()
+            ResponseState.Success(response)
         }catch (e:Exception){
             e.printStackTrace()
-            null
+            ResponseState.Error(e.toString())
         }
     }
 
 
-    override suspend fun deleteTask(idTask: String):Int {
+    override suspend fun deleteTask(idTask: String): ResponseState<Int> {
        return try {
-            toDoApiServices.deleteTask(idTask)
-           1
+           toDoApiServices.deleteTask(idTask)
+           ResponseState.Success(1)
         }catch (e:Exception){
             e.printStackTrace()
-           -1
+           ResponseState.Error(e.toString(),-1)
         }
     }
 
-    override suspend fun getAllPersonalLabels(): List<LabelDomain> {
+    override suspend fun getAllPersonalLabels(): ResponseState<List<LabelDomain>> {
         return try {
-             toDoApiServices.getAllPersonalLabels().map {
+            val response = toDoApiServices.getAllPersonalLabels().map {
                 it.toLabelDomain()
             }
+            ResponseState.Success(response)
         }catch (e:Exception){
             e.printStackTrace()
-            emptyList()
+            ResponseState.Error(e.toString(), emptyList())
         }
 
     }
 
-    override suspend fun createPersonalLabel(label: LabelDomain): LabelDomain? {
+    override suspend fun createPersonalLabel(label: LabelDomain): ResponseState<LabelDomain?> {
        return try {
-            toDoApiServices.createPersonalLabel(label.toLabelDto()).toLabelDomain()
-
+           val response =  toDoApiServices.createPersonalLabel(label.toLabelDto()).toLabelDomain()
+            ResponseState.Success(response)
         }catch (e:Exception){
             e.printStackTrace()
-           null
+           ResponseState.Error(e.toString())
         }
 
     }
 
-    override suspend fun getPersonalLabelById(idLabel: String): LabelDomain? {
+    override suspend fun getPersonalLabelById(idLabel: String): ResponseState<LabelDomain?> {
         return try {
-             toDoApiServices.getPersonalLabelById(idLabel).toLabelDomain()
+            val response = toDoApiServices.getPersonalLabelById(idLabel).toLabelDomain()
+            ResponseState.Success(response)
         }catch (e:Exception){
             e.printStackTrace()
-            null
+            ResponseState.Error(e.toString())
         }
 
     }
 
-    override suspend fun updatePersonalLabelById(idLabel: String, label: LabelDomain): LabelDomain? {
+    override suspend fun updatePersonalLabelById(idLabel: String, label: LabelDomain): ResponseState<LabelDomain?> {
         return try {
-             toDoApiServices.updatePersonalLabelById(idLabel, label.toLabelDto()).toLabelDomain()
-
+            val response = toDoApiServices.updatePersonalLabelById(idLabel, label.toLabelDto()).toLabelDomain()
+            ResponseState.Success(response)
         }catch (e:Exception){
             e.printStackTrace()
-            null
+           ResponseState.Error(e.toString())
         }
 
     }
 
-    override suspend fun deleteLabelById(idLabel: String):Int {
+    override suspend fun deleteLabelById(idLabel: String): ResponseState<Int> {
        return try {
             toDoApiServices.deleteLabelById(idLabel)
-           1
+           ResponseState.Success(1)
         }catch (e:Exception){
             e.printStackTrace()
-           -1
+           ResponseState.Error(e.toString(),-1)
         }
 
     }

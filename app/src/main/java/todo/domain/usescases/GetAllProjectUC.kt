@@ -4,22 +4,24 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import todo.domain.RepoProjects
+import todo.domain.ResponseState
 import todo.framework.Project
 import todo.toProject
 import javax.inject.Inject
 
 class GetAllProjectUC @Inject constructor (private val repoProjects: RepoProjects) {
-    suspend fun getAllProjects(): Flow<List<Project>> {
+    suspend fun getAllProjects(): ResponseState<Flow<List<Project>>> {
         val result = repoProjects.getAllProjectsFromApi()
 
-        return if(result.isNotEmpty()){
+        return if(result is ResponseState.Success){
             repoProjects.clearAllProjectsInDb()
-            result.forEach {repoProjects.createProjectInDB(it)}
-            repoProjects.getAllProjectsFromDB().map{list->
+            result.data?.forEach {repoProjects.createProjectInDB(it)}
+            val response =  repoProjects.getAllProjectsFromDB().map{list->
                 list.map { it.toProject() }
             }
+            ResponseState.Success(response)
         }else{
-            flowOf(emptyList())
+            ResponseState.Error(result.messange)
         }
 
     }

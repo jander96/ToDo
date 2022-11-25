@@ -1,9 +1,9 @@
 package todo.domain
 
 data class DueDomain(
-    val string: String?,
-    val date: String?,
-    val isRecurring: Boolean?,
-    val datetime: String?,
-    val timezone: String?
+    val string: String? = null,
+    val date: String? = null,
+    val isRecurring: Boolean? = null,
+    val datetime: String? = null,
+    val timezone: String? = null
 )

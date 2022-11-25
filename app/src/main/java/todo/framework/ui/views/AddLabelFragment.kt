@@ -22,7 +22,7 @@ class AddLabelFragment:Fragment(R.layout.add_label_page) {
     private val binding get() = _binding!!
     private lateinit var navController: NavController
     private val viewModel : AddLabelViewModel by viewModels()
-    private lateinit var colorCode:String
+    private var colorCode:String? = null
     private val colorPicker = ColorPickerBottomSheet{ colorCode ->
         this.colorCode = colorCode
     }

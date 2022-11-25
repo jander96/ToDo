@@ -27,7 +27,7 @@ class MainModule {
             .addInterceptor(ApiInterceptor())
             .addInterceptor(loggerBody)
             .addInterceptor(loggerHeader)
-            .callTimeout(15,TimeUnit.SECONDS)
+            .callTimeout(30,TimeUnit.SECONDS)
             .build()
     }
 

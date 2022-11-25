@@ -5,22 +5,25 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import todo.domain.RepoLabels
+import todo.domain.ResponseState
 import todo.framework.Label
 import todo.toLabel
 import javax.inject.Inject
 
 class GetAllPersonalLabelsUC @Inject constructor(private val repoLabels: RepoLabels) {
-    suspend fun getAllPersonalLabels(): Flow<List<Label>> {
+    suspend fun getAllPersonalLabels(): ResponseState<Flow<List<Label>>> {
         val result = repoLabels.getAllPersonalLabelsFromApi()
 
-        return if (result.isNotEmpty()) {
+        return if (result is ResponseState.Success) {
             repoLabels.clearAllLabels()
-            result.forEach { repoLabels.createPersonalLabelInDB(it) }
-            repoLabels.getAllPersonalLabelsFromDB().map {list->
+            result.data?.forEach { repoLabels.createPersonalLabelInDB(it) }
+            val response =repoLabels.getAllPersonalLabelsFromDB().map {list->
                 list.map { it.toLabel() }
             }
+            ResponseState.Success(response)
         } else {
-            flowOf(emptyList())
+            ResponseState.Error(result.messange)
+
         }
 
     }

@@ -9,7 +9,7 @@ import com.example.todo.databinding.ProjectPickerItemBinding
 import todo.framework.Project
 
 
-class ProjectAdapter : ListAdapter<Project,ProjectAdapter.ProjectViewHolder>(DiffUtillCallbackProjects) {
+class ProjectAdapter(private val stringPicked:(string:String)->Unit) : ListAdapter<Project,ProjectAdapter.ProjectViewHolder>(DiffUtillCallbackProjects) {
 
 
 
@@ -24,11 +24,13 @@ class ProjectAdapter : ListAdapter<Project,ProjectAdapter.ProjectViewHolder>(Dif
         holder.bind(getItem(position))
 
     }
-    class ProjectViewHolder(private val binding: ProjectPickerItemBinding) : RecyclerView.ViewHolder(binding.root){
+   inner class ProjectViewHolder(private val binding: ProjectPickerItemBinding) : RecyclerView.ViewHolder(binding.root){
 
         fun bind(project :Project ) {
             binding.tvLabelName.text = project.name
-
+            binding.tvLabelName.setOnClickListener {
+                stringPicked(project.name)
+            }
         }
 
 

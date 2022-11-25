@@ -2,6 +2,7 @@ package todo.domain.usescases
 
 
 import todo.domain.RepoLabels
+import todo.domain.ResponseState
 import todo.framework.Label
 import todo.toLabel
 import todo.toLabelDomain
@@ -13,13 +14,14 @@ class CreatePersonalLabelUC @Inject constructor (private val repoLabels: RepoLab
     //Los metodos de Create Update and Delete de la Api
     //retornan un valor -1 cuando fallan. Tener en cuenta
     // para retroalimentar al cliente cuando falle la Api
-    suspend fun  createPersonalLabel(label: Label):Label?{
+    suspend fun  createPersonalLabel(label: Label):ResponseState<Label?>{
         val result = repoLabels.createPersonalLabelInApi(label.toLabelDomain())
-        return if(result !=null){
-            repoLabels.createPersonalLabelInDB(result)
-            repoLabels.getPersonalLabelByIdFromDB(result.id).toLabel()
+        return if(result is ResponseState.Success){
+            repoLabels.createPersonalLabelInDB(result.data!!)
+            val response = repoLabels.getPersonalLabelByIdFromDB(result.data.id).toLabel()
+            ResponseState.Success(response)
         }else{
-            null
+            ResponseState.Error("Error to create label in Server ")
         }
 
     }

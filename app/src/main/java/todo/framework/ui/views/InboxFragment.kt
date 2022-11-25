@@ -10,15 +10,18 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.R
 import com.example.todo.databinding.InboxPageBinding
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import todo.domain.ResponseState
 import todo.framework.room.TodoDataBase
-import todo.framework.ui.ScreenState.*
 import todo.framework.ui.adapters.TaskIboxAdapter
 import todo.framework.ui.viewmodels.InboxViewModel
 import javax.inject.Inject
@@ -29,6 +32,7 @@ class InboxFragment : Fragment(R.layout.inbox_page) {
     private val binding get() = _binding!!
     private lateinit var recyclerView: RecyclerView
     private lateinit var navController: NavController
+
     @Inject
     lateinit var database: TodoDataBase
     private val viewModel: InboxViewModel by viewModels()
@@ -41,9 +45,11 @@ class InboxFragment : Fragment(R.layout.inbox_page) {
         navController = findNavController()
 
         setupToolbar()
-        setupProgress()
         setupRecyclerView()
+        setupScreen()
         searchViewListener()
+        swipeRecyclerViewToDelete()
+        setupSwipeRefresh()
 
     }
 
@@ -70,7 +76,56 @@ class InboxFragment : Fragment(R.layout.inbox_page) {
             appBarConfiguration
         )
         binding.toolbar.setupWithNavController(navController)
-        //binding.toolbar.inflateMenu(R.menu.main_menu)
+
+
+
+    }
+
+    private fun setupScreen(){
+        lifecycleScope.launch {
+
+            viewModel.listOfInboxTask.collect { responseState ->
+                when (responseState) {
+                    is ResponseState.Success -> {
+                        hideProgreesBar()
+                        responseState.data.let { flow ->
+                            flow?.collect {
+                                adapter.submitList(it)
+                                delay(5000)
+                                binding.swipe.isRefreshing = false
+
+                            }
+                        }
+
+
+                    }
+
+                    is ResponseState.Error -> {
+                        hideProgreesBar()
+                        binding.swipe.isRefreshing = false
+                        binding.ivNetworkError.visibility = View.VISIBLE
+
+
+                    }
+
+                    is ResponseState.Loading -> {
+                        showProgressBar()
+                        binding.swipe.isRefreshing = true
+                    }
+
+                }
+            }
+
+        }
+
+    }
+
+    private fun hideProgreesBar() {
+        binding.progress.visibility = View.INVISIBLE
+    }
+
+    private fun showProgressBar() {
+        binding.progress.visibility = View.VISIBLE
     }
 
     private fun setupRecyclerView() {
@@ -80,30 +135,8 @@ class InboxFragment : Fragment(R.layout.inbox_page) {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = layoutManager
 
-        lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.listOfInboxTask.collect {
-                adapter.submitList(it)
-            }
-        }
     }
 
-    private fun setupProgress() {
-        lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.screenState.collect { screenState ->
-
-                when (screenState) {
-                    LOADING -> binding.progress.visibility = View.VISIBLE
-                    SUSCCES -> binding.progress.visibility = View.INVISIBLE
-                    else -> {
-                        binding.recyclerView.visibility = View.INVISIBLE
-                        binding.ivNetworkError.visibility = View.VISIBLE
-                        binding.progress.visibility = View.INVISIBLE
-                    }
-                }
-
-            }
-        }
-    }
 
     private fun searchViewListener() {
         binding.search.setOnQueryTextListener(object :
@@ -120,6 +153,42 @@ class InboxFragment : Fragment(R.layout.inbox_page) {
             }
 
         })
+    }
+    fun swipeRecyclerViewToDelete(){
+        val itemTouchHelperCallback = object: ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val task = adapter.currentList[position]
+                viewModel.deleteTask(task)
+                Snackbar.make(binding.root,"Successfully delete task",Snackbar.LENGTH_SHORT).apply{
+                    show()
+                }
+            }
+        }
+
+        ItemTouchHelper(itemTouchHelperCallback).apply {
+            attachToRecyclerView(binding.recyclerView)
+        }
+
+    }
+    fun setupSwipeRefresh(){
+        binding.swipe.setColorSchemeResources(R.color.red,R.color.orange,R.color.yellow,R.color.green)
+        binding.swipe.setOnRefreshListener {
+           viewModel.getAllTasks()
+            setupScreen()
+
+        }
     }
 
 

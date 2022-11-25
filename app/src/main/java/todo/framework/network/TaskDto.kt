@@ -9,7 +9,7 @@ data class TaskDto(
     val content:String,
     val description:String?,
     @Json(name = "is_completed") val isCompleted:Boolean?,
-    val labels : Array<String>?,
+    val labels : Array<String?>?,
     @Json(name = "parent_id")val parentId:String?,
     val order:Int?,
     val priority:Int?,

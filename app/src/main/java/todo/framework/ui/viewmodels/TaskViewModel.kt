@@ -10,27 +10,32 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import todo.domain.ResponseState
+import todo.domain.usescases.CreateNewTaskUC
+import todo.domain.usescases.DeleteTaskUC
 import todo.domain.usescases.GetAllProjectUC
 import todo.domain.usescases.GetAllTaskUC
 import todo.domain.usescases.SearchTaskUC
 import todo.framework.Project
 import todo.framework.Task
-import todo.framework.ui.ScreenState
 import javax.inject.Inject
 
 @HiltViewModel
 class TaskViewModel @Inject constructor (
     private val getActiveTaskUC: GetAllTaskUC,
     private val searchTask: SearchTaskUC,
-    private val getAllProject: GetAllProjectUC
+    private val getAllProject: GetAllProjectUC,
+    private val deleteTaskUC: DeleteTaskUC,
+    private val createNewTaskUC: CreateNewTaskUC
 ): ViewModel() {
 
 
-    private var _listaTask= MutableStateFlow<List<Task>>(emptyList())
-    val listaTask:StateFlow<List<Task>> get() = _listaTask
+    private var _listaTask= MutableStateFlow<ResponseState<Flow<List<Task>>>>(ResponseState.Loading())
+    val listaTask:StateFlow<ResponseState<Flow<List<Task>>>> get() = _listaTask
 
-    private var _screenState = MutableStateFlow(ScreenState.LOADING)
-    val screenState: StateFlow<ScreenState> get()= _screenState
+    private var _allProjectList = MutableStateFlow<ResponseState<Flow<List<Project>>>>(ResponseState.Loading())
+    val allProjectList : StateFlow<ResponseState<Flow<List<Project>>>> get() = _allProjectList
+
 
     private var _queryAswer = MutableStateFlow<List<Task>>(emptyList())
     val queryAswer: StateFlow<List<Task>> get() = _queryAswer
@@ -38,28 +43,19 @@ class TaskViewModel @Inject constructor (
     private var _query = MutableStateFlow("")
     val query : StateFlow<String> get()= _query
 
-    private var _allProjectList = MutableStateFlow<List<Project>>(emptyList())
-    val allProjectList : StateFlow<List<Project>> get() = _allProjectList
+
 
     init{
-        Log.d("viewModel","View Model Bien Ijectado")
-        viewModelScope.launch(Dispatchers.Main) {
-            getAllTaskInProject().collect{
-                _listaTask.value= it
-                setScreenState()
-            }
-        }
-        viewModelScope.launch(Dispatchers.IO) {
-            getAllProject.getAllProjects().collect{
-                _allProjectList.value = it
-            }
-        }
-
+        getProjectList()
+        getAllTaskList()
     }
 
 
-    private suspend fun getAllTaskInProject(): Flow<List<Task>> {
-       return  getActiveTaskUC.getAllTasks()
+    private fun getProjectList() =viewModelScope.launch(Dispatchers.IO) {
+        _allProjectList.value = getAllProject.getAllProjects()
+    }
+     fun getAllTaskList()= viewModelScope.launch(Dispatchers.IO) {
+       _listaTask.value = getActiveTaskUC.getAllTasks()
     }
 
 
@@ -67,20 +63,21 @@ class TaskViewModel @Inject constructor (
         _query.value = query
 
         viewModelScope.launch(Dispatchers.IO) {
-            searchTask.searchTask(_query.value).distinctUntilChanged().collect{
+            searchTask.searchTask(_query.value).data?.distinctUntilChanged()?.collect{
                 _queryAswer.value = it
             }
         }
     }
+    fun deleteTask(task:Task)= viewModelScope.launch(Dispatchers.IO){
+        Log.d("Deleted","la task borrada tenia el id ${task.id}")
+        deleteTaskUC.deleteTask(task.id)
 
-    private fun setScreenState(){
-        Log.d("ScreenState","Se esta seteando el estado de la pantalla")
-        _screenState.value = ScreenState.LOADING
-        if(_listaTask.value.isEmpty()){
-            _screenState.value= ScreenState.FAIL
-        }else{
-            _screenState.value = ScreenState.SUSCCES
-        }
     }
+
+    fun createTask(task:Task)= viewModelScope.launch(Dispatchers.IO){
+        createNewTaskUC.creteNewTask(task)
+    }
+
+
 
 }

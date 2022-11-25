@@ -5,6 +5,7 @@ import todo.domain.LabelDomain
 import todo.domain.LocalResource
 import todo.domain.NetworkResources
 import todo.domain.RepoLabels
+import todo.domain.ResponseState
 import javax.inject.Inject
 
 class RepoLabelsImpl
@@ -12,7 +13,7 @@ class RepoLabelsImpl
     private val localResource: LocalResource,
     private val networkResources: NetworkResources
 ) : RepoLabels {
-    override suspend fun getAllPersonalLabelsFromApi(): List<LabelDomain> {
+    override suspend fun getAllPersonalLabelsFromApi(): ResponseState<List<LabelDomain>> {
         return networkResources.getAllPersonalLabels()
     }
 
@@ -20,7 +21,7 @@ class RepoLabelsImpl
         return localResource.getAllPersonalLabels()
     }
 
-    override suspend fun createPersonalLabelInApi(label: LabelDomain): LabelDomain? {
+    override suspend fun createPersonalLabelInApi(label: LabelDomain): ResponseState<LabelDomain?> {
        return networkResources.createPersonalLabel(label)
     }
 
@@ -28,7 +29,7 @@ class RepoLabelsImpl
        localResource.createPersonalLabel(label)
     }
 
-    override suspend fun getPersonalLabelByIdFromApi(idLabel: String): LabelDomain? {
+    override suspend fun getPersonalLabelByIdFromApi(idLabel: String): ResponseState<LabelDomain?> {
        return networkResources.getPersonalLabelById(idLabel)
     }
 
@@ -36,7 +37,7 @@ class RepoLabelsImpl
        return localResource.getPersonalLabelById(idLabel)
     }
 
-    override suspend fun updatePersonalLabelByIdInApi(idLabel: String, label: LabelDomain): LabelDomain? {
+    override suspend fun updatePersonalLabelByIdInApi(idLabel: String, label: LabelDomain): ResponseState<LabelDomain?> {
        return networkResources.updatePersonalLabelById(idLabel,label)
     }
 
@@ -44,7 +45,7 @@ class RepoLabelsImpl
         localResource.updatePersonalLabelById(idLabel,label)
     }
 
-    override suspend fun deleteLabelByIdInApi(idLabel: String):Int{
+    override suspend fun deleteLabelByIdInApi(idLabel: String): ResponseState<Int> {
        return networkResources.deleteLabelById(idLabel)
     }
 

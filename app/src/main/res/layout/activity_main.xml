@@ -19,6 +19,8 @@
         tools:layout="@layout/inbox_page" />
 
 
+
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"

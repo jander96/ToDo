@@ -4,28 +4,15 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <EditText
-        android:id="@+id/et_new_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="New Label"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-    <ImageView
-        android:id="@+id/iv_add_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_add"
-        app:layout_constraintStart_toEndOf="@id/et_new_label"
-        app:layout_constraintTop_toTopOf="@id/et_new_label"
-        app:layout_constraintBottom_toBottomOf="@id/et_new_label"
-        android:layout_marginStart="32dp"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/et_new_label"
-        app:layout_constraintStart_toStartOf="@id/et_new_label"
-        app:layout_constraintEnd_toEndOf="@id/iv_add_label"
-        tools:listitem="@layout/tag_picker_item"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/tag_picker_item"
+        android:layout_marginTop="32dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

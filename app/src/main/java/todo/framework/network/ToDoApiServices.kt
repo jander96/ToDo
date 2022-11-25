@@ -46,7 +46,7 @@ interface ToDoApiServices {
     @POST("tasks/{id}/reopen")
     suspend fun reopenTask(@Path("id") idTask: String)
 
-    @DELETE("/tasks/{id}")
+    @DELETE("tasks/{id}")
     suspend fun deleteTask(@Path("id") idTask: String):Response<Unit>
 
     //Labels

@@ -4,52 +4,52 @@ package todo.domain
 interface NetworkResources {
 
     //Project
-    suspend fun getAllProjects(): List<ProjectDomain>
+    suspend fun getAllProjects(): ResponseState<List<ProjectDomain>>
 
 
-    suspend fun createProject( projectDto: ProjectDomain):ProjectDomain?
+    suspend fun createProject( projectDto: ProjectDomain):ResponseState<ProjectDomain?>
 
 
-    suspend fun getProjectById( idProject: String): ProjectDomain?
+    suspend fun getProjectById( idProject: String): ResponseState<ProjectDomain?>
 
 
-    suspend fun updateProject( idProject: String, projectDto: ProjectDomain):ProjectDomain?
+    suspend fun updateProject( idProject: String, projectDto: ProjectDomain):ResponseState<ProjectDomain?>
 
-    suspend fun deleteProject(idProject: String):Int
+    suspend fun deleteProject(idProject: String):ResponseState<Int>
 
 
     //Task
 
-    suspend fun getActiveTasks(): List<TaskDomain>
+    suspend fun getActiveTasks(): ResponseState<List<TaskDomain>>
 
 
-    suspend fun createNewTask(task: TaskDomain):TaskDomain?
+    suspend fun createNewTask(task: TaskDomain):ResponseState<TaskDomain?>
 
 
-    suspend fun getAnActiveTaskById(idTask :String): TaskDomain?
+    suspend fun getAnActiveTaskById(idTask :String): ResponseState<TaskDomain?>
 
 
-    suspend fun updateTask( idTask: String, task: TaskDomain):TaskDomain?
+    suspend fun updateTask( idTask: String, task: TaskDomain):ResponseState<TaskDomain?>
 
 
-    suspend fun deleteTask( idTask: String):Int
+    suspend fun deleteTask( idTask: String):ResponseState<Int>
 
     //Labels
 
     //Personal labels
 
-   suspend fun getAllPersonalLabels(): List<LabelDomain>
+   suspend fun getAllPersonalLabels(): ResponseState<List<LabelDomain>>
 
 
-    suspend fun createPersonalLabel( label: LabelDomain):LabelDomain?
+    suspend fun createPersonalLabel( label: LabelDomain):ResponseState<LabelDomain?>
 
 
-    suspend fun getPersonalLabelById( idLabel: String):LabelDomain?
+    suspend fun getPersonalLabelById( idLabel: String):ResponseState<LabelDomain?>
 
 
-    suspend fun updatePersonalLabelById( idLabel: String, label: LabelDomain):LabelDomain?
+    suspend fun updatePersonalLabelById( idLabel: String, label: LabelDomain):ResponseState<LabelDomain?>
 
 
-    suspend fun deleteLabelById( idLabel: String):Int
+    suspend fun deleteLabelById( idLabel: String):ResponseState<Int>
 
 }

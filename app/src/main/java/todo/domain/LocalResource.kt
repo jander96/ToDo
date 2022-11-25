@@ -12,12 +12,13 @@ interface LocalResource {
     suspend fun createProject( project: ProjectDomain)
 
 
-    suspend fun getProjectById( idProject: String): ProjectDomain
+    suspend fun getProjectById( idProject: String): ProjectDomain?
 
 
     suspend fun updateProject( idProject: String, project: ProjectDomain)
 
     suspend fun deleteProject(idProject: String)
+    suspend fun findProjectIdByName( projectName : String): String
 
 
     //Task
@@ -28,7 +29,7 @@ interface LocalResource {
     suspend fun createNewTask(task: TaskDomain)
 
 
-    suspend fun getAnActiveTaskById(idTask :String): TaskDomain
+    suspend fun getAnActiveTaskById(idTask :String):TaskDomain
 
 
     suspend fun updateTask( idTask: String, task: TaskDomain)
@@ -46,7 +47,7 @@ interface LocalResource {
     suspend fun createPersonalLabel( label: LabelDomain)
 
 
-    suspend fun getPersonalLabelById( idLabel: String):LabelDomain
+    suspend fun getPersonalLabelById( idLabel: String): LabelDomain
 
 
     suspend fun updatePersonalLabelById( idLabel: String, label: LabelDomain)

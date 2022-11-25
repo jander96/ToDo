@@ -8,7 +8,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="120dp"
         android:layout_gravity="top"
         android:background="@color/color_toolbar"
         android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
@@ -38,6 +38,9 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
+    
+
+
 
     <ProgressBar
         android:id="@+id/progress"
@@ -53,15 +56,21 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         />
 
-
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    android:id="@+id/swipe"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/recycler_item"
         android:layout_marginBottom="40dp"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        app:layout_insetEdge="top"
        />
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

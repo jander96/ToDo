@@ -1,6 +1,7 @@
 package todo.domain.usescases
 
 import todo.domain.RepoTask
+import todo.domain.ResponseState
 import todo.domain.TaskDomain
 import todo.framework.Task
 import todo.toTask
@@ -16,13 +17,14 @@ class CreateNewTaskUC @Inject constructor (private val repoTask: RepoTask) {
     * a los metodos de la Api entonces podre obtener aqui en los casos de uso una
     * variable que contenga el objeto y lo paso directo a la base de datos */
 
-    suspend fun creteNewTask(task: Task): Task? {
+    suspend fun creteNewTask(task: Task): ResponseState<Task?> {
         val result = repoTask.createNewTaskInApi(task.toTaskDomain())
-        return if(result !=null){
-            repoTask.createNewTaskInDB(result)
-            repoTask.getAnActiveTaskByIdFromDB(result.id).toTask()
+        return if(result is ResponseState.Success){
+            repoTask.createNewTaskInDB(result.data!!)
+            val response = repoTask.getAnActiveTaskByIdFromDB(result.data.id).toTask()
+            ResponseState.Success(response)
         }else{
-            null
+            ResponseState.Error("Error to create Task in server")
         }
     }
 }

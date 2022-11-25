@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.map
 import todo.domain.LabelDomain
 import todo.domain.LocalResource
 import todo.domain.ProjectDomain
+import todo.domain.ResponseState
 import todo.domain.TaskDomain
 import todo.framework.room.TodoDataBase
 import todo.framework.room.entities.TaskEntity
@@ -20,11 +21,12 @@ class LocalResourceImpl @Inject constructor (private val database:TodoDataBase):
        return database.getProjectDao().getAllProjects().map {list->
            list.map { it.toDomain() }
        }
+
     }
 
     override fun searchTask(query: String): Flow<List<TaskEntity>> {
         Log.d("room","Se resliza la busqueda en Base de Datos")
-        return database.getTaskDao().searchTask(query)
+       return database.getTaskDao().searchTask(query)
 
     }
 
@@ -32,8 +34,9 @@ class LocalResourceImpl @Inject constructor (private val database:TodoDataBase):
          database.getProjectDao().createProject(project.toEntity())
     }
 
-    override suspend fun getProjectById(idProject: String): ProjectDomain {
+    override suspend fun getProjectById(idProject: String): ProjectDomain? {
       return database.getProjectDao().getProjectById(idProject).toDomain()
+
     }
 
     override suspend fun updateProject(idProject: String, project: ProjectDomain) {
@@ -50,6 +53,7 @@ class LocalResourceImpl @Inject constructor (private val database:TodoDataBase):
        return  database.getTaskDao().getActiveTasks().map{
            it.map { it.toDomain() }
        }
+
     }
 
     override suspend fun createNewTask(task: TaskDomain) {
@@ -58,6 +62,11 @@ class LocalResourceImpl @Inject constructor (private val database:TodoDataBase):
 
     override suspend fun getAnActiveTaskById(idTask: String): TaskDomain {
        return database.getTaskDao().getAnActiveTaskById(idTask).toDomain()
+
+    }
+
+    override suspend fun findProjectIdByName(projectName: String): String {
+        return database.getProjectDao().findProjectIdByName(projectName)
     }
 
     override suspend fun updateTask(idTask: String, task: TaskDomain) {
@@ -74,6 +83,7 @@ class LocalResourceImpl @Inject constructor (private val database:TodoDataBase):
        return  database.getLabelDao().getAllPersonalLabels().map{
            it.map{it.toDomain()}
        }
+
     }
 
     override suspend fun createPersonalLabel(label: LabelDomain) {
@@ -81,7 +91,8 @@ class LocalResourceImpl @Inject constructor (private val database:TodoDataBase):
     }
 
     override suspend fun getPersonalLabelById(idLabel: String): LabelDomain {
-       return database.getLabelDao().getPersonalLabelById(idLabel).toDomain()
+       return  database.getLabelDao().getPersonalLabelById(idLabel).toDomain()
+
     }
 
     override suspend fun updatePersonalLabelById(idLabel: String, label: LabelDomain) {
