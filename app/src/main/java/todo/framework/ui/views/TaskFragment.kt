@@ -109,7 +109,6 @@ class TaskFragment: Fragment(R.layout.task_page) {
                         responseState.data.let { flow ->
                             flow?.collect {
                                 adapter.submitList(it)
-                                delay(5000)
                                 binding.swipe.isRefreshing = false
                             }
                         }
