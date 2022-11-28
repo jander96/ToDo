@@ -9,12 +9,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import todo.domain.ResponseState
 import todo.domain.usescases.CreateNewTaskUC
 import todo.domain.usescases.DeleteTaskUC
 import todo.domain.usescases.GetAllProjectUC
 import todo.domain.usescases.GetAllTaskUC
+import todo.domain.usescases.GetTaskByIdUC
 import todo.domain.usescases.SearchTaskUC
 import todo.framework.Project
 import todo.framework.Task
@@ -77,6 +79,9 @@ class TaskViewModel @Inject constructor (
     fun createTask(task:Task)= viewModelScope.launch(Dispatchers.IO){
         createNewTaskUC.creteNewTask(task)
     }
+
+
+
 
 
 

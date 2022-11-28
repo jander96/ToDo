@@ -1,5 +1,6 @@
 package todo.domain.usescases
 
+import android.util.Log
 import todo.domain.RepoTask
 import todo.domain.ResponseState
 import todo.domain.TaskDomain
@@ -22,6 +23,7 @@ class CreateNewTaskUC @Inject constructor (private val repoTask: RepoTask) {
         return if(result is ResponseState.Success){
             repoTask.createNewTaskInDB(result.data!!)
             val response = repoTask.getAnActiveTaskByIdFromDB(result.data.id).toTask()
+            Log.d("Task","Se creo la tarea")
             ResponseState.Success(response)
         }else{
             ResponseState.Error("Error to create Task in server")

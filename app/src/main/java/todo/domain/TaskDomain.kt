@@ -1,5 +1,7 @@
 package todo.domain
 
+import com.squareup.moshi.Json
+
 data class TaskDomain(
     val id: String,
     val projectId: String?,
@@ -11,8 +13,10 @@ data class TaskDomain(
     val parentId: String?,
     val order: Int?,
     val priority: Int?,
-    val due: DueDomain?,
-    val url: String?,
+    val string: String?,
+    val date: String?,
+    val datetime: String?,
+    val timezone: String?,
     val commentCount: Int?,
     val createdAt: String?,
     val creatorId: String?,

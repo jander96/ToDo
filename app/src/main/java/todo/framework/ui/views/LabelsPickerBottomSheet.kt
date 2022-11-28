@@ -56,6 +56,7 @@ class LabelsPickerBottomSheet(private val labelPicked:(label:String)->Unit ):Bot
 
         val adapter = LabelAdapter{
             labelPicked(it)
+            dismiss()
         }.apply {
             submitList(listLabel)
         }

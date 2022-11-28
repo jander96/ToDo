@@ -39,6 +39,7 @@ fun ProjectDto.toProjectDomain() =
         viewStyle,
         url
     )
+
 fun ProjectDomain.toProjectDto() =
     ProjectDto(
         id,
@@ -54,7 +55,8 @@ fun ProjectDomain.toProjectDto() =
         viewStyle,
         url
     )
-fun Project.toProjectDomain()=
+
+fun Project.toProjectDomain() =
     ProjectDomain(
         id,
         name,
@@ -69,7 +71,8 @@ fun Project.toProjectDomain()=
         viewStyle,
         url
     )
-fun ProjectDomain.toProject()=
+
+fun ProjectDomain.toProject() =
     Project(
         id,
         name,
@@ -84,10 +87,12 @@ fun ProjectDomain.toProject()=
         viewStyle,
         url
     )
+
 fun CollaboratorsDto.toCollaboratorsDomain() =
     CollaboratorsDomain(
         id, name, email
     )
+
 fun CollaboratorsDomain.toCollaborators() =
     Collaborators(
         id, name, email
@@ -105,15 +110,18 @@ fun TaskDto.toTaskDomain() =
         parentId,
         order,
         priority,
-        due?.toDueDomain(),
-        url,
+        string,
+        date,
+        datetime,
+        timezone,
         commentCount,
         createdAt,
         creatorId,
         assigneeId,
         assignerId
     )
-fun TaskDomain.toTaskDto()=
+
+fun TaskDomain.toTaskDto() =
     TaskDto(
         id,
         projectId,
@@ -125,14 +133,17 @@ fun TaskDomain.toTaskDto()=
         parentId,
         order,
         priority,
-        due?.toDueDto(),
-        url,
+        string,
+        date,
+        datetime,
+        timezone,
         commentCount,
         createdAt,
         creatorId,
         assigneeId,
         assignerId
     )
+
 fun TaskDomain.toTask() =
     Task(
         id,
@@ -145,15 +156,12 @@ fun TaskDomain.toTask() =
         parentId,
         order,
         priority,
-        due,
-        url,
-        commentCount,
-        createdAt,
-        creatorId,
-        assigneeId,
-        assignerId
+        string,
+        date,
+        datetime
     )
-fun Task.toTaskDomain()=
+
+fun Task.toTaskDomain() =
     TaskDomain(
         id,
         projectId,
@@ -165,8 +173,10 @@ fun Task.toTaskDomain()=
         parentId,
         order,
         priority,
-        due,
-        url,
+        string,
+        date,
+        datetime,
+        timezone,
         commentCount,
         createdAt,
         creatorId,
@@ -182,7 +192,8 @@ fun DueDto.toDueDomain() =
         datetime,
         timezone
     )
-fun DueDomain.toDueDto()=
+
+fun DueDomain.toDueDto() =
     DueDto(
         string,
         date,
@@ -190,6 +201,7 @@ fun DueDomain.toDueDto()=
         datetime,
         timezone
     )
+
 fun LabelDto.toLabelDomain() =
     LabelDomain(
         id,
@@ -198,7 +210,8 @@ fun LabelDto.toLabelDomain() =
         order,
         isFavorite
     )
-fun LabelDomain.toLabelDto()=
+
+fun LabelDomain.toLabelDto() =
     LabelDto(
         id,
         name,
@@ -206,25 +219,29 @@ fun LabelDomain.toLabelDto()=
         order,
         isFavorite
     )
-fun LabelDomain.toLabel()=
+
+fun LabelDomain.toLabel() =
     Label(
         id, name, color, order, isFavorite
     )
-fun Label.toLabelDomain()=
+
+fun Label.toLabelDomain() =
     LabelDomain(
         id, name, color, order, isFavorite
     )
 
-fun LabelDomain.toEntity()=
+fun LabelDomain.toEntity() =
     LabelEntity(
         id, name, color, order, isFavorite
     )
-fun RenamedLabelDomain.toRenamedLabelDto()=
+
+fun RenamedLabelDomain.toRenamedLabelDto() =
     RenamedLabelDto(
         name,
         newName
     )
-fun RenamedLabel.toRenamedLabelDomain()=
+
+fun RenamedLabel.toRenamedLabelDomain() =
     RenamedLabelDomain(
         name, newName
     )
@@ -232,8 +249,8 @@ fun RenamedLabel.toRenamedLabelDomain()=
 fun ProjectEntity.toDomain() =
     ProjectDomain(
         id = id,
-        name= name,
-        color= color,
+        name = name,
+        color = color,
         parentId = null,
         order = order,
         commentCount = null,
@@ -244,47 +261,63 @@ fun ProjectEntity.toDomain() =
         viewStyle = null,
         url = url
     )
-fun TaskEntity.toDomain()=
+
+fun TaskEntity.toDomain() =
     TaskDomain(
-        id = id,
-        projectId = projectId,
-        sectionId = null,
-        content = content,
-        description = description,
-        isCompleted = isCompleted,
-        labels = labels,
-        parentId = null,
-        order = order,
-        priority = priority,
-        due = due?.toDueDomain(),
-        url = url,
-        commentCount = null,
-        createdAt = null,
-        creatorId = null,
-        assigneeId = null,
-        assignerId = null
+        id,
+        projectId,
+        sectionId,
+        content,
+        description,
+        isCompleted,
+        labels,
+        parentId,
+        order,
+        priority,
+        string,
+        date,
+        datetime,
+        timezone,
+        commentCount,
+        createdAt,
+        creatorId,
+        assigneeId,
+        assignerId
     )
+
 fun TaskDomain.toEntity() =
     TaskEntity(
-        id = id,
-        projectId = projectId,
-        content = content,
-        description = description,
-        isCompleted = isCompleted,
-        labels = labels,
-        order = order,
-        priority = priority,
-        due= due?.toEmbeddedle(),
-        url= url
+        id,
+        projectId,
+        sectionId,
+        content,
+        description,
+        isCompleted,
+        labels,
+        parentId,
+        order,
+        priority,
+        string,
+        date,
+        datetime,
+        timezone,
+        commentCount,
+        createdAt,
+        creatorId,
+        assigneeId,
+        assignerId
     )
-fun DueEmbeddeble.toDueDomain()=
+
+fun DueEmbeddeble.toDueDomain() =
     DueDomain(
         string, date, isRecurring, datetime, timezone
     )
-fun DueDomain.toEmbeddedle()=
+
+fun DueDomain.toEmbeddedle() =
     DueEmbeddeble(
         string, date, isRecurring, datetime, timezone
     )
+
 fun LabelEntity.toDomain() =
     LabelDomain(
         id = id,
@@ -293,6 +326,7 @@ fun LabelEntity.toDomain() =
         order = order,
         isFavorite = isFavorite
     )
+
 fun ProjectDomain.toEntity() =
     ProjectEntity(
         id, name, color, order, isFavorite, isInboxProject, url

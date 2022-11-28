@@ -21,7 +21,7 @@ import todo.framework.ui.adapters.ProjectAdapter
 import todo.framework.ui.viewmodels.ProjectPickerViewModel
 
 @AndroidEntryPoint
-class ProjectPickerBottomSheet(private val projectPicked: (projectPicked: String) -> Unit) :
+class ProjectPickerBottomSheet(private val projectPicked: (projectIdPicked: String) -> Unit) :
     BottomSheetDialogFragment(R.layout.project_picker_page) {
     private var _binding: ProjectPickerPageBinding? = null
     private val binding get() = _binding!!
@@ -59,8 +59,9 @@ class ProjectPickerBottomSheet(private val projectPicked: (projectPicked: String
     }
 
     private fun setupRecyclerView(listProject: List<Project>) {
-        val adapter = ProjectAdapter {
-            projectPicked(it)
+        val adapter = ProjectAdapter {projectIdPicked->
+            projectPicked(projectIdPicked)
+            dismiss()
         }.apply {
             submitList(listProject)
         }

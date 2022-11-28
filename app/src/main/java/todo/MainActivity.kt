@@ -72,7 +72,6 @@ class MainActivity : AppCompatActivity() {
     private fun setUpBottomSheet(){
         val bottomSheetBehavior = (taskBottomSheet.dialog as? BottomSheetDialog)?.behavior
         bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-
         taskBottomSheet.show(supportFragmentManager,AddTaskBottomSheet.TAG)
 
     }

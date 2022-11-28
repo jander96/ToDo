@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -32,7 +33,6 @@ class TaskFragment: Fragment(R.layout.task_page) {
     private lateinit var navController: NavController
     private lateinit var recyclerView: RecyclerView
 
-
     private lateinit var adapter :TaskAdapter
     
 
@@ -48,6 +48,7 @@ class TaskFragment: Fragment(R.layout.task_page) {
         swipeRecyclerViewToDelete()
         searchViewListener()
         setupSwipeRefresh()
+
 
     }
 
@@ -149,7 +150,7 @@ class TaskFragment: Fragment(R.layout.task_page) {
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
-            ): Boolean {
+             ): Boolean {
                 return true
             }
 
@@ -162,6 +163,9 @@ class TaskFragment: Fragment(R.layout.task_page) {
                 }
             }
         }
+        ItemTouchHelper(itemTouchHelperCallback).apply{
+            attachToRecyclerView(binding.recyclerView)
+        }
     }
     fun setupSwipeRefresh(){
         binding.swipe.setColorSchemeResources(R.color.red,R.color.orange,R.color.yellow,R.color.green)
@@ -171,6 +175,7 @@ class TaskFragment: Fragment(R.layout.task_page) {
 
         }
     }
+
     override fun onDestroy() {
         _binding = null
         super.onDestroy()

@@ -6,8 +6,13 @@
 
     <fragment
         android:id="@+id/inboxFragment"
-        android:name="todo.framework.ui.views.InboxFragment"
-        android:label="Inbox" />
+        android:name="todo.framework.ui.views.ProjectFragment"
+        android:label="Projects" >
+        <action
+            android:id="@+id/action_project_to_task_by_project"
+            app:destination="@id/taskByProjectFragment"
+            app:popUpTo="@id/inboxFragment" />
+    </fragment>
     <fragment
         android:id="@+id/taskFragment"
         android:name="todo.framework.ui.views.TaskFragment"
@@ -37,5 +42,13 @@
         android:id="@+id/addProjectFragment"
         android:name="todo.framework.ui.views.AddProjectFragment"
         android:label="New Project" />
+    <fragment
+        android:id="@+id/taskByProjectFragment"
+        android:name="todo.framework.ui.views.TaskByProjectFragment"
+        android:label="Project´s Tasks" >
+        <argument
+            android:name="projectId"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

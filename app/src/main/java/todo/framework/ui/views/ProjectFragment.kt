@@ -10,6 +10,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,17 +18,15 @@ import com.example.todo.R
 import com.example.todo.databinding.InboxPageBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import todo.domain.ResponseState
 import todo.framework.room.TodoDataBase
-import todo.framework.ui.adapters.TaskIboxAdapter
-import todo.framework.ui.viewmodels.InboxViewModel
+import todo.framework.ui.adapters.ProjectHomeAdapter
+import todo.framework.ui.viewmodels.ProjectViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class InboxFragment : Fragment(R.layout.inbox_page) {
+class ProjectFragment : Fragment(R.layout.inbox_page) {
     private var _binding: InboxPageBinding? = null
     private val binding get() = _binding!!
     private lateinit var recyclerView: RecyclerView
@@ -35,8 +34,8 @@ class InboxFragment : Fragment(R.layout.inbox_page) {
 
     @Inject
     lateinit var database: TodoDataBase
-    private val viewModel: InboxViewModel by viewModels()
-    private lateinit var adapter: TaskIboxAdapter
+    private val viewModel: ProjectViewModel by viewModels()
+    private lateinit var adapter: ProjectHomeAdapter
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,24 +46,14 @@ class InboxFragment : Fragment(R.layout.inbox_page) {
         setupToolbar()
         setupRecyclerView()
         setupScreen()
-        searchViewListener()
         swipeRecyclerViewToDelete()
         setupSwipeRefresh()
 
     }
 
-    private fun searchTask(query: String?) {
-        viewModel.searchTask("%$query%")
-        updateListOfTask()
-    }
 
-    private fun updateListOfTask() {
-        lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.queryAswer.collect {
-                adapter.submitList(it)
-            }
-        }
-    }
+
+
 
     private fun setupToolbar() {
         val appBarConfiguration =
@@ -77,14 +66,12 @@ class InboxFragment : Fragment(R.layout.inbox_page) {
         )
         binding.toolbar.setupWithNavController(navController)
 
-
-
     }
 
     private fun setupScreen(){
         lifecycleScope.launch {
 
-            viewModel.listOfInboxTask.collect { responseState ->
+            viewModel.listOfAllProjects.collect { responseState ->
                 when (responseState) {
                     is ResponseState.Success -> {
                         hideProgreesBar()
@@ -129,30 +116,20 @@ class InboxFragment : Fragment(R.layout.inbox_page) {
 
     private fun setupRecyclerView() {
         recyclerView = binding.recyclerView
-        adapter = TaskIboxAdapter()
-        val layoutManager = LinearLayoutManager(requireContext())
+        adapter = ProjectHomeAdapter(){
+            filterListByProject(it)
+        }
+        val layoutManager = GridLayoutManager(requireContext(),3,GridLayoutManager.VERTICAL,false)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = layoutManager
 
     }
 
-
-    private fun searchViewListener() {
-        binding.search.setOnQueryTextListener(object :
-            androidx.appcompat.widget.SearchView.OnQueryTextListener {
-
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                searchTask(query)
-                return false
-            }
-
-            override fun onQueryTextChange(query: String?): Boolean {
-                searchTask(query)
-                return false
-            }
-
-        })
+    private fun filterListByProject(projectId: String) {
+        navController.navigate(ProjectFragmentDirections.actionProjectToTaskByProject(projectId))
     }
+
+
     fun swipeRecyclerViewToDelete(){
         val itemTouchHelperCallback = object: ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
@@ -169,7 +146,7 @@ class InboxFragment : Fragment(R.layout.inbox_page) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
                 val task = adapter.currentList[position]
-                viewModel.deleteTask(task)
+                viewModel.deleteProject(task)
                 Snackbar.make(binding.root,"Successfully delete task",Snackbar.LENGTH_SHORT).apply{
                     show()
                 }
@@ -184,7 +161,7 @@ class InboxFragment : Fragment(R.layout.inbox_page) {
     fun setupSwipeRefresh(){
         binding.swipe.setColorSchemeResources(R.color.red,R.color.orange,R.color.yellow,R.color.green)
         binding.swipe.setOnRefreshListener {
-           viewModel.getAllTasks()
+           viewModel.getAllProjects()
             setupScreen()
 
         }

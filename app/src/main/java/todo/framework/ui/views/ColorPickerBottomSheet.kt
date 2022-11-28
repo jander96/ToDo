@@ -17,6 +17,7 @@ class ColorPickerBottomSheet(private val getColorCode:(colorCode:String)->Unit):
     private lateinit var recyclerView: RecyclerView
     private val adapter = ColorsPickerAdapter{ colorCode, isDestroyed ->
         getColorCode(colorCode)
+        dismiss()
 
     }
 
