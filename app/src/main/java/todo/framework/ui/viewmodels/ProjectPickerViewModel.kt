@@ -22,7 +22,7 @@ class ProjectPickerViewModel
         getAllProjects()
     }
 
-    private fun getAllProjects()= viewModelScope.launch {
+    fun getAllProjects()= viewModelScope.launch {
         _listOfProjects.value = getAllProjectUC.getAllProjects()
     }
 

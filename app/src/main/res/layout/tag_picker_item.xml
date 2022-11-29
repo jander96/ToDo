@@ -5,10 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="4dp">
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="4dp"
+        android:layout_gravity="center"/>
     <ImageView
         android:id="@+id/iv_label"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:layout_marginStart="8dp"
         android:src="@drawable/label_svgrepo_com"/>
     <TextView
         android:id="@+id/tv_label_name"

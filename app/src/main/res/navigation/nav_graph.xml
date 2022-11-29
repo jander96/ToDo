@@ -29,6 +29,9 @@
             android:id="@+id/action_label_to_addProject"
             app:destination="@id/addProjectFragment"
             app:popUpTo="@id/labelFragment"/>
+        <action
+            android:id="@+id/action_labelFragment_to_taskByProjectFragment"
+            app:destination="@id/taskByProjectFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -48,7 +51,14 @@
         android:label="Project´s Tasks" >
         <argument
             android:name="projectId"
-            app:argType="string" />
+            app:argType="string"
+            android:defaultValue="null"
+            app:nullable="true" />
+        <argument
+            android:name="label"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null"/>
     </fragment>
 
 </navigation>

@@ -57,8 +57,9 @@ class TaskByProjectFragmentViewModel @Inject constructor(
     }
 
 
-    fun isLabelInArray(label:String,labels : Array<String?>?): Boolean{
-        return label in labels!!
+    fun isLabelInArray(label:String,labels : Array<String>?): Boolean{
+        return if(labels != null ) label in labels
+        else false
     }
 
 

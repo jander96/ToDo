@@ -51,6 +51,11 @@ class LabelFragment : Fragment(R.layout.label_page) {
 
 
         expanableListView.setOnChildClickListener { expandableListView, view, groupPosition, childPosition, l ->
+            val label = viewModel.listOfAllLabels.value[childPosition].name
+            if (groupPosition == 1){
+                navController.navigate(LabelFragmentDirections.actionLabelFragmentToTaskByProjectFragment(label =  label))
+            }
+
             true
         }
 

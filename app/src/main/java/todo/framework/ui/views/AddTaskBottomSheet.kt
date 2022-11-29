@@ -13,10 +13,7 @@ import com.example.todo.databinding.CreateTaskBottonSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import todo.domain.DueDomain
-import todo.domain.ResponseState
 import todo.framework.Task
 import todo.framework.ui.viewmodels.AddTaskViewModel
 import javax.inject.Inject
@@ -33,7 +30,7 @@ class AddTaskBottomSheet @Inject constructor() : BottomSheetDialogFragment() {
     private val viewModel: AddTaskViewModel by viewModels()
     private var date: String? = null
     private var dateTime: String? = null
-    private var labelName: String? = null
+    private var labelList: Array<String>? = null
     private var projectId: String? = null
 
 
@@ -44,7 +41,7 @@ class AddTaskBottomSheet @Inject constructor() : BottomSheetDialogFragment() {
         dateTime = viewModel.onTimeSelected(hour, minutes)
     }
     private val labelsPickerBottomSheet = LabelsPickerBottomSheet { labelNamePicked ->
-        labelName = viewModel.onLabelSelected(labelNamePicked)
+        labelList = viewModel.onLabelSelected(labelNamePicked)
     }
     private val projectPickerBottomSheet = ProjectPickerBottomSheet { projectIdPicked ->
         projectId = viewModel.onProjectSelected(projectIdPicked)
@@ -95,19 +92,20 @@ class AddTaskBottomSheet @Inject constructor() : BottomSheetDialogFragment() {
         val description = binding.etTaskDescription.text.toString()
         val date = date
         val dateTime = dateTime
-        val labelName = labelName
+        val labels = labelList
         val projectId = projectId
-        val due = DueDomain(date = date, datetime = date + dateTime)
 
         return Task(
             id = "",
             content = content,
             description = description,
             projectId = projectId,
-            labels = arrayOf(labelName)// Cambiar esta implementacion hacer un adapter q tenga un check box
-                                       // y mandar desde el un array con todos los  items con check box seleccionados
-        )                              // tambien tener en cuenta de no crear un array de null , si este es el caso entences
-                                        // se debe pasar label = null en vez de label = arrayOf(null)
+            date = date,
+            datetime = dateTime,
+            labels = labels
+
+        )
+
 
     }
 

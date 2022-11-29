@@ -9,7 +9,7 @@ data class TaskDomain(
     val content: String,
     val description: String?,
     val isCompleted: Boolean?,
-    val labels: Array<String?>?,
+    val labels: Array<String>?,
     val parentId: String?,
     val order: Int?,
     val priority: Int?,

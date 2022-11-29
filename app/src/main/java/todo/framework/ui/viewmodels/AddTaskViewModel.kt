@@ -34,7 +34,7 @@ class AddTaskViewModel
         return "T$hour:$minutes:00"
     }
 
-    fun onLabelSelected(labelName: String): String {
+    fun onLabelSelected(labelName: Array<String>): Array<String> {
         return labelName
     }
 

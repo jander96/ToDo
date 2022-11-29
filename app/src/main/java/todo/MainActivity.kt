@@ -55,17 +55,30 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigation.setupWithNavController(navController)
 
-        val coroutineExceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
-            throwable.printStackTrace()
-        }
-
 
 
        binding.fab.setOnClickListener {
           setUpBottomSheet()
        }
+        val listener = NavController.OnDestinationChangedListener{ controller,destination,arguments ->
+            if(destination.id == R.id.taskByProjectFragment){
+                hideBottomNavigation()
+            }else showBottomNavigation()
+        }
+        navController.addOnDestinationChangedListener(listener)
 
 
+    }
+
+    private fun hideBottomNavigation(){
+        binding.bottomNavigation.visibility = View.GONE
+        binding.bottomAppBar.visibility = View.GONE
+        binding.fab.visibility = View.GONE
+    }
+    private fun showBottomNavigation(){
+        binding.bottomNavigation.visibility = View.VISIBLE
+        binding.bottomAppBar.visibility = View.VISIBLE
+        binding.fab.visibility = View.VISIBLE
     }
 
 

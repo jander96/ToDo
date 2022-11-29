@@ -9,14 +9,19 @@ import com.example.todo.databinding.TagPickerItemBinding
 import todo.framework.Label
 import todo.framework.Project
 
-class LabelAdapter(private val stringPicked:(string:String)->Unit):ListAdapter<Label,LabelAdapter.LabelsViewHolder>(DiffUtillCallbackLabels) {
-
+class LabelAdapter :ListAdapter<Label,LabelAdapter.LabelsViewHolder>(DiffUtillCallbackLabels) {
+    private var _listLabelsPicked: MutableList<String> = mutableListOf()
+    val listLabelsPicked : MutableList<String> = _listLabelsPicked
    inner class LabelsViewHolder(private val binding:TagPickerItemBinding) :RecyclerView.ViewHolder(binding.root){
         fun bind(label: Label) {
             binding.tvLabelName.text = label.name
-            binding.tvLabelName.setOnClickListener {
-                stringPicked(label.name)
+            binding.checkBox.setOnClickListener {
+                if(binding.checkBox.isChecked){
+                    _listLabelsPicked.add(label.name)
+                }
+
             }
+
         }
 
     }

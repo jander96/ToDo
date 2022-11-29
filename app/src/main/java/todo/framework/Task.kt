@@ -7,7 +7,7 @@ data class Task(
     val content: String,
     val description: String? = null,
     val isCompleted: Boolean? = null,
-    val labels: Array<String?>? = null,
+    val labels: Array<String>? = null,
     val parentId: String? = null,
     val order: Int? = null,
     val priority: Int? = null,

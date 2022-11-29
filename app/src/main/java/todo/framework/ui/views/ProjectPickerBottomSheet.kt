@@ -14,9 +14,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import todo.domain.ResponseState
-import todo.framework.Label
 import todo.framework.Project
-import todo.framework.ui.adapters.LabelAdapter
 import todo.framework.ui.adapters.ProjectAdapter
 import todo.framework.ui.viewmodels.ProjectPickerViewModel
 
@@ -35,16 +33,20 @@ class ProjectPickerBottomSheet(private val projectPicked: (projectIdPicked: Stri
         _binding = ProjectPickerPageBinding.bind(view)
         navController = findNavController()
         recyclerView = binding.recyclerView
+        setupScreen()
 
+    }
+    private fun setupScreen(){
         lifecycleScope.launch {
             viewModel.listOfProjects.collect { response ->
                 when (response) {
                     is ResponseState.Error -> {
-
+                        showRetryIcon()
+                        retry()
                     }
 
                     is ResponseState.Loading -> {
-
+                        showLoadingBar()
                     }
 
                     is ResponseState.Success -> {
@@ -57,9 +59,15 @@ class ProjectPickerBottomSheet(private val projectPicked: (projectIdPicked: Stri
         }
 
     }
+    private fun retry() {
+        binding.ivRetry.setOnClickListener {
+            viewModel.getAllProjects()
+        }
+        setupScreen()
+    }
 
     private fun setupRecyclerView(listProject: List<Project>) {
-        val adapter = ProjectAdapter {projectIdPicked->
+        val adapter = ProjectAdapter { projectIdPicked->
             projectPicked(projectIdPicked)
             dismiss()
         }.apply {
@@ -70,5 +78,15 @@ class ProjectPickerBottomSheet(private val projectPicked: (projectIdPicked: Stri
         val layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = layoutManager
+    }
+
+    private fun showRetryIcon() {
+        binding.ivRetry.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.INVISIBLE
+    }
+
+    private fun showLoadingBar() {
+        binding.progressBar.visibility = View.VISIBLE
+        binding.ivRetry.visibility = View.INVISIBLE
     }
 }

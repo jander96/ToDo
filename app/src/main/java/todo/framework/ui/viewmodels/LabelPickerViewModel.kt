@@ -22,7 +22,7 @@ class LabelPickerViewModel
         getListOfLabels()
     }
 
-    private fun getListOfLabels()= viewModelScope.launch {
+    fun getListOfLabels()= viewModelScope.launch {
         _listOfLabels.value = getAllPersonalLabelsUC.getAllPersonalLabels()
     }
 

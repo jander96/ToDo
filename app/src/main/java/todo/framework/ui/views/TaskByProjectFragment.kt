@@ -57,7 +57,7 @@ class TaskByProjectFragment : Fragment(R.layout.task_by_project) {
     }
 
     private fun filterListByProject() {
-        viewModel.filterTaskByProject(args.projectId)
+        viewModel.filterTaskByProject(args.projectId!!)
     }
     private fun filterListByLabels(){
         viewModel.filterListByLLabels("label")
@@ -69,7 +69,9 @@ class TaskByProjectFragment : Fragment(R.layout.task_by_project) {
             viewModel.listaTask.collect { responseState ->
                 when (responseState) {
                     is ResponseState.Success -> {
-                        filterListByProject()
+                        if(args.projectId != null)filterListByProject()
+                        else filterListByLabels()
+
                         hideProgreesBar()
                         viewModel.listaTaskFiltred.collect{
                             adapter.submitList(it)
@@ -97,6 +99,7 @@ class TaskByProjectFragment : Fragment(R.layout.task_by_project) {
 
     }
 
+
     private fun hideProgreesBar() {
         binding.progress.visibility = View.INVISIBLE
     }
@@ -105,7 +108,7 @@ class TaskByProjectFragment : Fragment(R.layout.task_by_project) {
         binding.progress.visibility = View.VISIBLE
     }
 
-    fun setupSwipeRefresh() {
+    private fun setupSwipeRefresh() {
         binding.swipe.setColorSchemeResources(
             R.color.red,
             R.color.orange,
