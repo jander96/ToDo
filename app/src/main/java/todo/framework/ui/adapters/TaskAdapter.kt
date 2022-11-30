@@ -32,6 +32,7 @@ class TaskAdapter : ListAdapter<Task,TaskAdapter.TaskViewHolder>(DiffUtilCallbac
     class TaskViewHolder(private val binding:RecyclerItemBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(task:Task) {
             binding.txtTaskTitle.text = task.content
+            binding.txtDescription.text = task.description
 
         }
 

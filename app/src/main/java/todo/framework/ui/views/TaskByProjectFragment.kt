@@ -1,6 +1,7 @@
 package todo.framework.ui.views
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -57,10 +58,12 @@ class TaskByProjectFragment : Fragment(R.layout.task_by_project) {
     }
 
     private fun filterListByProject() {
+        Log.d("Filter","Se esta filtrando por Project")
         viewModel.filterTaskByProject(args.projectId!!)
     }
     private fun filterListByLabels(){
-        viewModel.filterListByLLabels("label")
+        Log.d("Filter","Se esta filtrando por label")
+        viewModel.filterListByLLabels(args.label!!)
     }
 
     private fun setupScreen() {
@@ -69,8 +72,11 @@ class TaskByProjectFragment : Fragment(R.layout.task_by_project) {
             viewModel.listaTask.collect { responseState ->
                 when (responseState) {
                     is ResponseState.Success -> {
-                        if(args.projectId != null)filterListByProject()
-                        else filterListByLabels()
+                        Log.d("Filter","Args projectId = ${args.projectId } Args labels = ${args.label}")
+                        when{
+                            args.projectId != null -> filterListByProject()
+                            args.label != null -> filterListByLabels()
+                        }
 
                         hideProgreesBar()
                         viewModel.listaTaskFiltred.collect{

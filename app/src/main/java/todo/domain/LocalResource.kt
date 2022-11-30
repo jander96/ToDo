@@ -36,6 +36,7 @@ interface LocalResource {
 
 
     suspend fun deleteTask( idTask: String)
+    suspend fun findLabelByName( labelName : String): String
 
     //Labels
 

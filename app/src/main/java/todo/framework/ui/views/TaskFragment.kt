@@ -106,7 +106,6 @@ class TaskFragment: Fragment(R.layout.task_page) {
             viewModel.listaTask.collect { responseState ->
                 when (responseState) {
                     is ResponseState.Success -> {
-                        hideProgreesBar()
                         responseState.data.let { flow ->
                             flow?.collect {
                                 adapter.submitList(it)
@@ -116,15 +115,12 @@ class TaskFragment: Fragment(R.layout.task_page) {
                     }
 
                     is ResponseState.Error -> {
-                        hideProgreesBar()
                         binding.swipe.isRefreshing = false
                         binding.ivNetworkError.visibility = View.VISIBLE
-                        binding.progress.visibility = View.INVISIBLE
 
                     }
 
                     is ResponseState.Loading -> {
-                        showProgressBar()
                         binding.swipe.isRefreshing = true
                     }
 
@@ -134,13 +130,7 @@ class TaskFragment: Fragment(R.layout.task_page) {
         }
 
     }
-    private fun hideProgreesBar() {
-        binding.progress.visibility = View.INVISIBLE
-    }
 
-    private fun showProgressBar() {
-        binding.progress.visibility = View.VISIBLE
-    }
     private fun swipeRecyclerViewToDelete(){
         val itemTouchHelperCallback = object: ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,

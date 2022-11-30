@@ -77,6 +77,10 @@ class LocalResourceImpl @Inject constructor (private val database:TodoDataBase):
         database.getTaskDao().deleteTask(idTask)
     }
 
+    override suspend fun findLabelByName(labelName: String): String {
+       return database.getLabelDao().getLabelIdByName(labelName)
+    }
+
 
     //Labels
     override  fun getAllPersonalLabels(): Flow<List<LabelDomain>> {

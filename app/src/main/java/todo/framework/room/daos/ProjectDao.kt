@@ -20,6 +20,7 @@ interface ProjectDao {
     @Query("SELECT id From project_table Where name = :projectName")
     suspend fun findProjectIdByName( projectName : String): String
 
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun createProject( vararg projectEntity: ProjectEntity)
 

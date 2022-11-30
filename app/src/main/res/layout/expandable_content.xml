@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_margin="4dp">
+    android:layout_margin="4dp"
+    android:id="@+id/layout">
     <ImageView
         android:id="@+id/iv_tag"
         android:layout_width="24dp"
@@ -21,5 +22,24 @@
         android:layout_marginStart="32dp"
         tools:text="Projects"
         android:textColor="@color/design_default_color_on_secondary"/>
+    <ImageView
+        android:id="@+id/iv_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@id/iv_clear"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginEnd="32dp"
+        android:src="@drawable/baseline_filter_alt_24"
+        android:visibility="gone"
+        />
+
+    <ImageView
+        android:id="@+id/iv_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_clear_24"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

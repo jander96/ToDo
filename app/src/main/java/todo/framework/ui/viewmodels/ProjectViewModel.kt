@@ -12,7 +12,9 @@ import todo.domain.ResponseState
 import todo.domain.usescases.CreateNewTaskUC
 import todo.domain.usescases.DeleteProjectUC
 import todo.domain.usescases.DeleteTaskUC
+import todo.domain.usescases.GetAllPersonalLabelsUC
 import todo.domain.usescases.GetAllProjectUC
+import todo.domain.usescases.GetAllTaskUC
 import todo.framework.Project
 import todo.framework.Task
 import javax.inject.Inject
@@ -21,8 +23,9 @@ import javax.inject.Inject
 class ProjectViewModel
 @Inject constructor(
     private val getAllProjectUC: GetAllProjectUC,
-    private val deleteProjectUC: DeleteProjectUC,
-    private val createNewTaskUC: CreateNewTaskUC
+    private val getAllTaskUC: GetAllTaskUC,
+    private val getAllPersonalLabelsUC: GetAllPersonalLabelsUC,
+    private val deleteProjectUC: DeleteProjectUC
 ) : ViewModel() {
 
     private var _listOfAllProjects = MutableStateFlow<ResponseState<Flow<List<Project>>>>(ResponseState.Loading())
@@ -32,22 +35,24 @@ class ProjectViewModel
     init {
 
         getAllProjects()
+        getAllTask()
+        getAllLabels()
 
     }
 
-    fun getAllProjects() = viewModelScope.launch {
+    fun getAllProjects() = viewModelScope.launch(Dispatchers.IO) {
         _listOfAllProjects.value = getAllProjectUC.getAllProjects()
     }
-
+    private fun getAllTask()= viewModelScope.launch(Dispatchers.IO) {
+        getAllTaskUC.getAllTasks()
+    }
+    private fun getAllLabels() = viewModelScope.launch(Dispatchers.IO){
+        getAllPersonalLabelsUC.getAllPersonalLabels()
+    }
 
     fun deleteProject(project :Project)= viewModelScope.launch(Dispatchers.IO){
        deleteProjectUC.deleteProject(project.id)
 
     }
-
-    fun createTask(task:Task)= viewModelScope.launch(Dispatchers.IO){
-        createNewTaskUC.creteNewTask(task)
-    }
-
 
 }

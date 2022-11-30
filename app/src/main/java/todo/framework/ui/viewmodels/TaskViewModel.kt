@@ -17,6 +17,7 @@ import todo.domain.usescases.DeleteTaskUC
 import todo.domain.usescases.GetAllProjectUC
 import todo.domain.usescases.GetAllTaskUC
 import todo.domain.usescases.GetTaskByIdUC
+import todo.domain.usescases.GettAllTaskFromDBUC
 import todo.domain.usescases.SearchTaskUC
 import todo.framework.Project
 import todo.framework.Task
@@ -24,19 +25,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TaskViewModel @Inject constructor (
-    private val getActiveTaskUC: GetAllTaskUC,
+    private val getAllTaskDb: GettAllTaskFromDBUC,
     private val searchTask: SearchTaskUC,
-    private val getAllProject: GetAllProjectUC,
-    private val deleteTaskUC: DeleteTaskUC,
-    private val createNewTaskUC: CreateNewTaskUC
+    private val deleteTaskUC: DeleteTaskUC
 ): ViewModel() {
 
 
     private var _listaTask= MutableStateFlow<ResponseState<Flow<List<Task>>>>(ResponseState.Loading())
     val listaTask:StateFlow<ResponseState<Flow<List<Task>>>> get() = _listaTask
 
-    private var _allProjectList = MutableStateFlow<ResponseState<Flow<List<Project>>>>(ResponseState.Loading())
-    val allProjectList : StateFlow<ResponseState<Flow<List<Project>>>> get() = _allProjectList
 
 
     private var _queryAswer = MutableStateFlow<List<Task>>(emptyList())
@@ -48,16 +45,13 @@ class TaskViewModel @Inject constructor (
 
 
     init{
-        getProjectList()
+
         getAllTaskList()
     }
 
 
-    private fun getProjectList() =viewModelScope.launch(Dispatchers.IO) {
-        _allProjectList.value = getAllProject.getAllProjects()
-    }
      fun getAllTaskList()= viewModelScope.launch(Dispatchers.IO) {
-       _listaTask.value = getActiveTaskUC.getAllTasks()
+       _listaTask.value = getAllTaskDb.getAllLabelsDb()
     }
 
 
@@ -74,10 +68,6 @@ class TaskViewModel @Inject constructor (
         Log.d("Deleted","la task borrada tenia el id ${task.id}")
         deleteTaskUC.deleteTask(task.id)
 
-    }
-
-    fun createTask(task:Task)= viewModelScope.launch(Dispatchers.IO){
-        createNewTaskUC.creteNewTask(task)
     }
 
 

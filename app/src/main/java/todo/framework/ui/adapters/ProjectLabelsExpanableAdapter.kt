@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
+import android.widget.ImageView
 import android.widget.ListAdapter
 import android.widget.TextView
 import com.example.todo.R
@@ -12,7 +13,8 @@ import com.example.todo.R
 class ProjectLabelsExpanableAdapter(
     private val context: Context,
     private val titles: List<String>,
-    private val data: HashMap<String, List<String>>
+    private val data: HashMap<String, List<String>>,
+    private val childClickListener : (groupPosition : Int ,childName: String?)-> Unit
 ) : BaseExpandableListAdapter() {
     override fun getGroupCount(): Int {
         return titles.size
@@ -35,7 +37,7 @@ class ProjectLabelsExpanableAdapter(
     }
 
     override fun getChildId(titlePosition: Int, childPosition: Int): Long {
-        return data[titles[titlePosition]]!![childPosition].toLong()
+        return (titlePosition * childPosition).toLong()
     }
 
     override fun hasStableIds(): Boolean {
@@ -54,6 +56,7 @@ class ProjectLabelsExpanableAdapter(
                 context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             view = layoutInflater.inflate(R.layout.expandable_title, parent, false)
         }
+
         val title = view!!.findViewById<TextView>(R.id.expandable_title)
         title.text = getGroup(titlePosition) as String
         return view
@@ -73,6 +76,12 @@ class ProjectLabelsExpanableAdapter(
         }
         val labelTitle = view!!.findViewById<TextView>(R.id.tv_tag_title)
         labelTitle.text = getChild(groupPosition,childPosition) as String
+        val btnClear = view.findViewById<ImageView>(R.id.iv_clear)
+        btnClear?.setOnClickListener {
+            val childName = data[titles[groupPosition]]?.get(childPosition)
+            childClickListener(groupPosition,childName)
+
+        }
         return view
     }
 

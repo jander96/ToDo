@@ -46,6 +46,10 @@ class LabelsPickerBottomSheet(private val labelPicked: (labels: Array<String>) -
             labelPicked(array)
             dismiss()
         }
+        binding.ivRetry.setOnClickListener {
+            viewModel.getListOfLabels()
+            setupScreen()
+        }
 
 
     }
@@ -56,7 +60,7 @@ class LabelsPickerBottomSheet(private val labelPicked: (labels: Array<String>) -
                 when (response) {
                     is ResponseState.Error -> {
                         showRetryIcon()
-                        retry()
+
                     }
 
                     is ResponseState.Loading -> {
@@ -66,6 +70,8 @@ class LabelsPickerBottomSheet(private val labelPicked: (labels: Array<String>) -
                     is ResponseState.Success -> {
                         response.data?.collect { listLabel ->
                             setupRecyclerView(listLabel)
+                            binding.ivRetry.visibility = View.INVISIBLE
+                            binding.progressBar.visibility = View.INVISIBLE
                         }
                     }
                 }
@@ -73,12 +79,7 @@ class LabelsPickerBottomSheet(private val labelPicked: (labels: Array<String>) -
         }
     }
 
-    private fun retry() {
-        binding.ivRetry.setOnClickListener {
-            viewModel.getListOfLabels()
-        }
-        setupScreen()
-    }
+
 
     private fun showRetryIcon() {
         binding.ivRetry.visibility = View.VISIBLE

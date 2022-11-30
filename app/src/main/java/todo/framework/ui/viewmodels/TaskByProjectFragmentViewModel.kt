@@ -1,5 +1,6 @@
 package todo.framework.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -7,19 +8,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import todo.domain.ResponseState
-import todo.domain.usescases.GetAllTaskUC
+import todo.domain.usescases.GettAllTaskFromDBUC
 import todo.framework.Task
 import javax.inject.Inject
 
 @HiltViewModel
 class TaskByProjectFragmentViewModel @Inject constructor(
-    private val getActiveTaskUC: GetAllTaskUC
+    private val gettAllTaskDb : GettAllTaskFromDBUC
 ):ViewModel() {
 
     private var _listaTask= MutableStateFlow<ResponseState<Flow<List<Task>>>>(ResponseState.Loading())
@@ -34,7 +32,7 @@ class TaskByProjectFragmentViewModel @Inject constructor(
     }
 
     fun getAllTaskList()= viewModelScope.launch(Dispatchers.IO) {
-        _listaTask.value = getActiveTaskUC.getAllTasks()
+        _listaTask.value = gettAllTaskDb.getAllLabelsDb()
     }
 
     fun filterTaskByProject(projectId:String)= viewModelScope.launch{
@@ -47,20 +45,16 @@ class TaskByProjectFragmentViewModel @Inject constructor(
         }
     }
 
-    fun filterListByLLabels(label: String) {
-
+    fun filterListByLLabels(label: String)=viewModelScope.launch {
         _listaTask.value.data?.map {listTask ->
             listTask.filter { task->
-                isLabelInArray(label ,task.labels)
+                task.labels?.contains(label) ?: false
             }
+        }?.collect{
+            _listaTaskFiltred.value = it
         }
     }
 
-
-    fun isLabelInArray(label:String,labels : Array<String>?): Boolean{
-        return if(labels != null ) label in labels
-        else false
-    }
 
 
 

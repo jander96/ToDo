@@ -12,6 +12,7 @@ interface RepoLabels {
 
     suspend fun getPersonalLabelByIdFromApi( idLabel: String): ResponseState<LabelDomain?>
     suspend fun getPersonalLabelByIdFromDB( idLabel: String): LabelDomain
+    suspend fun findLabelByName( labelName : String): String
 
     suspend fun updatePersonalLabelByIdInApi( idLabel: String, label: LabelDomain):ResponseState<LabelDomain?>
     suspend fun updatePersonalLabelByIdInDB( idLabel: String, label: LabelDomain)

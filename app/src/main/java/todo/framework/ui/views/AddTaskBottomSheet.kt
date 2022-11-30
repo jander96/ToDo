@@ -11,6 +11,7 @@ import com.example.todo.R
 import com.example.todo.databinding.CreateTaskBottonSheetBinding
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -79,11 +80,25 @@ class AddTaskBottomSheet @Inject constructor() : BottomSheetDialogFragment() {
 
         binding.ivSend.setOnClickListener {
 
-           lifecycleScope.launchWhenResumed {
-               withContext(Dispatchers.IO){ viewModel.createTask(buildTask())}
-           }
-
+            lifecycleScope.launchWhenResumed {
+                binding.progressBar.visibility = View.VISIBLE
+                withContext(Dispatchers.IO) { viewModel.createTask(buildTask()) }
+                binding.progressBar.visibility = View.GONE
+                cleanTextFieldAndMemory()
+                dismiss()
+            }
         }
+    }
+
+    private fun cleanTextFieldAndMemory() {
+        binding.etTaskName.setText("")
+        binding.etTaskDescription.setText("")
+        date = null
+        dateTime = null
+        labelList = null
+        projectId = null
+
+
     }
 
 
@@ -109,7 +124,7 @@ class AddTaskBottomSheet @Inject constructor() : BottomSheetDialogFragment() {
 
     }
 
- 
+
     private fun showTimePicker() {
         timePicker.show(requireActivity().supportFragmentManager, "timePicker")
     }

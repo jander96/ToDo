@@ -18,6 +18,8 @@ interface LabelDao {
     //Personal labels
     @Query("SELECT * FROM label_table")
     fun getAllPersonalLabels(): Flow<List<LabelEntity>>
+    @Query("SELECT id FROM label_table WHERE name = :labelName")
+    suspend fun getLabelIdByName(labelName : String): String
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun createPersonalLabel( label: LabelEntity)

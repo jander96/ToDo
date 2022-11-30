@@ -37,6 +37,10 @@ class RepoLabelsImpl
        return localResource.getPersonalLabelById(idLabel)
     }
 
+    override suspend fun findLabelByName(labelName: String): String {
+        return localResource.findLabelByName(labelName)
+    }
+
     override suspend fun updatePersonalLabelByIdInApi(idLabel: String, label: LabelDomain): ResponseState<LabelDomain?> {
        return networkResources.updatePersonalLabelById(idLabel,label)
     }

@@ -74,7 +74,6 @@ class ProjectFragment : Fragment(R.layout.inbox_page) {
             viewModel.listOfAllProjects.collect { responseState ->
                 when (responseState) {
                     is ResponseState.Success -> {
-                        hideProgreesBar()
                         responseState.data.let { flow ->
                             flow?.collect {
                                 adapter.submitList(it)
@@ -87,7 +86,6 @@ class ProjectFragment : Fragment(R.layout.inbox_page) {
                     }
 
                     is ResponseState.Error -> {
-                        hideProgreesBar()
                         binding.swipe.isRefreshing = false
                         binding.ivNetworkError.visibility = View.VISIBLE
 
@@ -95,7 +93,6 @@ class ProjectFragment : Fragment(R.layout.inbox_page) {
                     }
 
                     is ResponseState.Loading -> {
-                        showProgressBar()
                         binding.swipe.isRefreshing = true
                     }
 
@@ -106,13 +103,6 @@ class ProjectFragment : Fragment(R.layout.inbox_page) {
 
     }
 
-    private fun hideProgreesBar() {
-        binding.progress.visibility = View.INVISIBLE
-    }
-
-    private fun showProgressBar() {
-        binding.progress.visibility = View.VISIBLE
-    }
 
     private fun setupRecyclerView() {
         recyclerView = binding.recyclerView

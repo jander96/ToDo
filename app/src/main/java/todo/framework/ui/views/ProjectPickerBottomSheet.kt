@@ -26,6 +26,10 @@ class ProjectPickerBottomSheet(private val projectPicked: (projectIdPicked: Stri
     private lateinit var recyclerView: RecyclerView
     private lateinit var navController: NavController
     private val viewModel: ProjectPickerViewModel by viewModels()
+    private val adapter = ProjectAdapter { projectIdPicked->
+        projectPicked(projectIdPicked)
+        dismiss()
+    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,6 +38,10 @@ class ProjectPickerBottomSheet(private val projectPicked: (projectIdPicked: Stri
         navController = findNavController()
         recyclerView = binding.recyclerView
         setupScreen()
+        binding.ivRetry.setOnClickListener {
+            viewModel.getAllProjects()
+
+        }
 
     }
     private fun setupScreen(){
@@ -42,16 +50,20 @@ class ProjectPickerBottomSheet(private val projectPicked: (projectIdPicked: Stri
                 when (response) {
                     is ResponseState.Error -> {
                         showRetryIcon()
-                        retry()
+                        setupScreen()
+
                     }
 
                     is ResponseState.Loading -> {
                         showLoadingBar()
+                        setupScreen()
                     }
 
                     is ResponseState.Success -> {
                         response.data?.collect { listOfProjects ->
                             setupRecyclerView(listOfProjects)
+                            binding.ivRetry.visibility = View.INVISIBLE
+                            binding.progressBar.visibility = View.INVISIBLE
                         }
                     }
                 }
@@ -59,20 +71,10 @@ class ProjectPickerBottomSheet(private val projectPicked: (projectIdPicked: Stri
         }
 
     }
-    private fun retry() {
-        binding.ivRetry.setOnClickListener {
-            viewModel.getAllProjects()
-        }
-        setupScreen()
-    }
+
 
     private fun setupRecyclerView(listProject: List<Project>) {
-        val adapter = ProjectAdapter { projectIdPicked->
-            projectPicked(projectIdPicked)
-            dismiss()
-        }.apply {
-            submitList(listProject)
-        }
+        adapter.submitList(listProject)
 
         recyclerView.adapter = adapter
         val layoutManager =
@@ -83,6 +85,7 @@ class ProjectPickerBottomSheet(private val projectPicked: (projectIdPicked: Stri
     private fun showRetryIcon() {
         binding.ivRetry.visibility = View.VISIBLE
         binding.progressBar.visibility = View.INVISIBLE
+
     }
 
     private fun showLoadingBar() {
