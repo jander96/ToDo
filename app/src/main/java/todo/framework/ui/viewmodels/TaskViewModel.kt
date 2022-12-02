@@ -65,9 +65,7 @@ class TaskViewModel @Inject constructor (
         }
     }
     fun deleteTask(task:Task)= viewModelScope.launch(Dispatchers.IO){
-        Log.d("Deleted","la task borrada tenia el id ${task.id}")
         deleteTaskUC.deleteTask(task.id)
-
     }
 
 

@@ -1,5 +1,10 @@
 package todo.framework
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+
+@Parcelize
 data class Task(
     val id: String,
     val projectId: String? = null,
@@ -20,4 +25,4 @@ data class Task(
     val creatorId: String? = null,
     val assigneeId: String? = null,
     val assignerId: String? = null
-)
+) : Parcelable

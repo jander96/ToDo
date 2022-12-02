@@ -1,20 +1,25 @@
 package todo.framework.ui.views
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavArgs
+import androidx.navigation.fragment.navArgs
 import com.example.todo.R
 import com.example.todo.databinding.CreateTaskBottonSheetBinding
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import todo.domain.ResponseState
 import todo.framework.Task
 import todo.framework.ui.viewmodels.AddTaskViewModel
 import javax.inject.Inject
@@ -23,16 +28,19 @@ import javax.inject.Inject
 class AddTaskBottomSheet @Inject constructor() : BottomSheetDialogFragment() {
     companion object {
         const val TAG = "task_bottom_sheet"
+        const val TASK = "task"
     }
 
     private var _binding: CreateTaskBottonSheetBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: AddTaskViewModel by viewModels()
+    private var id: String = ""
     private var date: String? = null
     private var dateTime: String? = null
     private var labelList: Array<String>? = null
     private var projectId: String? = null
+    private var task: Task? = null
 
 
     private val datePicker = DatePickerFragment { year, moth, day ->
@@ -57,10 +65,18 @@ class AddTaskBottomSheet @Inject constructor() : BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.create_task_botton_sheet, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = CreateTaskBottonSheetBinding.bind(view)
+        task = if (Build.VERSION.SDK_INT >= 33) {
+            arguments?.getParcelable(TASK, Task::class.java)
+        } else {
+            arguments?.getParcelable<Task>(TASK)
+        }
 
+
+        fill()
 
         binding.ivCalendar.setOnClickListener {
             showDatePickerDialog()
@@ -73,6 +89,7 @@ class AddTaskBottomSheet @Inject constructor() : BottomSheetDialogFragment() {
         binding.ivTag.setOnClickListener {
             showTagPicker()
         }
+        if (task?.projectId != null) binding.ivProject.visibility = View.GONE
         binding.ivProject.setOnClickListener {
             showProjectPicker()
         }
@@ -80,47 +97,66 @@ class AddTaskBottomSheet @Inject constructor() : BottomSheetDialogFragment() {
 
         binding.ivSend.setOnClickListener {
 
-            lifecycleScope.launchWhenResumed {
-                binding.progressBar.visibility = View.VISIBLE
-                withContext(Dispatchers.IO) { viewModel.createTask(buildTask()) }
-                binding.progressBar.visibility = View.GONE
-                cleanTextFieldAndMemory()
-                dismiss()
+            lifecycleScope.launch(Dispatchers.IO) {
+                withContext(Dispatchers.Main) {
+                    binding.tvMessangeError.visibility = View.GONE
+                    binding.animationLoading.visibility = View.VISIBLE
+                }
+                val response = viewModel.createTask(buildTask())
+                withContext(Dispatchers.Main) {
+                    binding.animationLoading.visibility = View.GONE
+                    if (response.data == null) {
+                        binding.tvMessangeError.visibility = View.VISIBLE
+                    } else {
+                        cleanTextFieldAndMemory()
+                        dismiss()
+                    }
+                }
+
             }
         }
     }
 
+    private fun fill() {
+        binding.etTaskName.setText(task?.content ?: "")
+        binding.etTaskDescription.setText(task?.description ?: "")
+    }
+
+
     private fun cleanTextFieldAndMemory() {
         binding.etTaskName.setText("")
         binding.etTaskDescription.setText("")
+        id = ""
         date = null
         dateTime = null
         labelList = null
         projectId = null
 
-
     }
 
 
     private fun buildTask(): Task {
-        val content = binding.etTaskName.text.toString()
-        val description = binding.etTaskDescription.text.toString()
-        val date = date
-        val dateTime = dateTime
-        val labels = labelList
-        val projectId = projectId
+        val id = task?.id ?: id
+        val content =
+            if (binding.etTaskName.text.toString() != "") binding.etTaskName.text.toString()
+            else task?.content ?: ""
+        val description =
+            if (binding.etTaskDescription.text.toString() != "") binding.etTaskDescription.text.toString()
+            else task?.description ?: ""
+        val date = date ?: task?.date
+        val dateTime = dateTime ?: task?.datetime
+        val labels = labelList ?: task?.labels
+        val projectId = projectId ?: task?.projectId
 
         return Task(
-            id = "",
+            id = id,
             content = content,
             description = description,
             projectId = projectId,
             date = date,
             datetime = dateTime,
             labels = labels
-
         )
-
 
     }
 

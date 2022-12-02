@@ -8,9 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.databinding.RecyclerItemBinding
 import com.example.todo.databinding.TaskPageBinding
 import todo.framework.Task
+import todo.framework.room.entities.Converters
 
 
-class TaskAdapter : ListAdapter<Task,TaskAdapter.TaskViewHolder>(DiffUtilCallback){
+class TaskAdapter(private val listener :(task :Task )->Unit) : ListAdapter<Task,TaskAdapter.TaskViewHolder>(DiffUtilCallback){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
        return TaskViewHolder(
@@ -29,10 +30,15 @@ class TaskAdapter : ListAdapter<Task,TaskAdapter.TaskViewHolder>(DiffUtilCallbac
     }
 
 
-    class TaskViewHolder(private val binding:RecyclerItemBinding): RecyclerView.ViewHolder(binding.root){
+    inner class TaskViewHolder(private val binding:RecyclerItemBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(task:Task) {
+            val labelsString = Converters().arrayToString(task.labels ?: arrayOf())
             binding.txtTaskTitle.text = task.content
             binding.txtDescription.text = task.description
+            binding.tvLabels.text = labelsString
+            binding.tvDate.text = task.date ?: ""
+            binding.ivEdit.setOnClickListener { listener(task) }
+
 
         }
 

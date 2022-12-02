@@ -10,10 +10,12 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.R
 import com.example.todo.databinding.TaskByProjectBinding
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import todo.domain.ResponseState
@@ -40,6 +42,7 @@ class TaskByProjectFragment : Fragment(R.layout.task_by_project) {
         setupRecycler()
         setupScreen()
         setupSwipeRefresh()
+
     }
 
     private fun setupRecycler() {
@@ -50,7 +53,11 @@ class TaskByProjectFragment : Fragment(R.layout.task_by_project) {
             requireContext(),
             LinearLayoutManager.VERTICAL, false
         )
-        adapter = TaskAdapter()
+        adapter = TaskAdapter{task->
+            val bundle = Bundle()
+            bundle.putParcelable(AddTaskBottomSheet.TASK,task)
+            navController.navigate(R.id.action_global_addTaskBottomSheet,bundle)
+        }
         recyclerView.adapter = adapter
 
         recyclerView.layoutManager = linearLayoutManager
@@ -103,6 +110,32 @@ class TaskByProjectFragment : Fragment(R.layout.task_by_project) {
 
         }
 
+    }
+    private fun swipeRecyclerViewToDelete(){
+        val itemTouchHelperCallback = object: ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val task = adapter.currentList[position]
+                viewModel.deleteTask(task)
+                Snackbar.make(binding.root,"Successfully delete task", Snackbar.LENGTH_SHORT).apply{
+                    show()
+                }
+            }
+        }
+        ItemTouchHelper(itemTouchHelperCallback).apply{
+            attachToRecyclerView(binding.recyclerView)
+        }
     }
 
 

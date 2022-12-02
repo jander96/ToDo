@@ -41,6 +41,7 @@ class ProjectViewModel
     }
 
     fun getAllProjects() = viewModelScope.launch(Dispatchers.IO) {
+        _listOfAllProjects.value = ResponseState.Loading()
         _listOfAllProjects.value = getAllProjectUC.getAllProjects()
     }
     private fun getAllTask()= viewModelScope.launch(Dispatchers.IO) {

@@ -11,12 +11,16 @@
         <action
             android:id="@+id/action_project_to_task_by_project"
             app:destination="@id/taskByProjectFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
             app:popUpTo="@id/inboxFragment" />
     </fragment>
     <fragment
         android:id="@+id/taskFragment"
         android:name="todo.framework.ui.views.TaskFragment"
-        android:label="Task" />
+        android:label="Task" >
+
+
+    </fragment>
     <fragment
         android:id="@+id/labelFragment"
         android:name="todo.framework.ui.views.LabelFragment"
@@ -31,7 +35,8 @@
             app:popUpTo="@id/labelFragment"/>
         <action
             android:id="@+id/action_labelFragment_to_taskByProjectFragment"
-            app:destination="@id/taskByProjectFragment" />
+            app:destination="@id/taskByProjectFragment"
+            app:popUpTo="@id/labelFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -60,5 +65,17 @@
             app:nullable="true"
             android:defaultValue="@null"/>
     </fragment>
+    <dialog
+        android:id="@+id/addTaskBottomSheet"
+        android:name="todo.framework.ui.views.AddTaskBottomSheet"
+        android:label="AddTaskBottomSheet" >
+
+        <argument
+            android:name="task"
+            app:argType="todo.framework.Task"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </dialog>
+    <action android:id="@+id/action_global_addTaskBottomSheet" app:destination="@id/addTaskBottomSheet"/>
 
 </navigation>

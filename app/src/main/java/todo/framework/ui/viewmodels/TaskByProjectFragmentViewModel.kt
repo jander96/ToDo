@@ -11,55 +11,56 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import todo.domain.ResponseState
+import todo.domain.usescases.DeleteTaskUC
 import todo.domain.usescases.GettAllTaskFromDBUC
 import todo.framework.Task
 import javax.inject.Inject
 
 @HiltViewModel
 class TaskByProjectFragmentViewModel @Inject constructor(
-    private val gettAllTaskDb : GettAllTaskFromDBUC
-):ViewModel() {
+    private val gettAllTaskDb: GettAllTaskFromDBUC,
+    private val deleteTaskUC: DeleteTaskUC
+) : ViewModel() {
 
-    private var _listaTask= MutableStateFlow<ResponseState<Flow<List<Task>>>>(ResponseState.Loading())
-    val listaTask : StateFlow<ResponseState<Flow<List<Task>>>> get()= _listaTask
+    private var _listaTask =
+        MutableStateFlow<ResponseState<Flow<List<Task>>>>(ResponseState.Loading())
+    val listaTask: StateFlow<ResponseState<Flow<List<Task>>>> get() = _listaTask
 
-    private var _listaTaskFiltred= MutableStateFlow<List<Task>>(emptyList())
+    private var _listaTaskFiltred = MutableStateFlow<List<Task>>(emptyList())
     val listaTaskFiltred: StateFlow<List<Task>> get() = _listaTaskFiltred
 
 
-    init{
+    init {
         getAllTaskList()
     }
 
-    fun getAllTaskList()= viewModelScope.launch(Dispatchers.IO) {
+    fun getAllTaskList() = viewModelScope.launch(Dispatchers.IO) {
         _listaTask.value = gettAllTaskDb.getAllLabelsDb()
     }
 
-    fun filterTaskByProject(projectId:String)= viewModelScope.launch{
-        _listaTask.value.data?.map{listTask->
+    fun filterTaskByProject(projectId: String) = viewModelScope.launch {
+        _listaTask.value.data?.map { listTask ->
             listTask.filter {
                 it.projectId == projectId
             }
-        }?.collect{
+        }?.collect {
             _listaTaskFiltred.value = it
         }
     }
 
-    fun filterListByLLabels(label: String)=viewModelScope.launch {
-        _listaTask.value.data?.map {listTask ->
-            listTask.filter { task->
+    fun filterListByLLabels(label: String) = viewModelScope.launch {
+        _listaTask.value.data?.map { listTask ->
+            listTask.filter { task ->
                 task.labels?.contains(label) ?: false
             }
-        }?.collect{
+        }?.collect {
             _listaTaskFiltred.value = it
         }
     }
 
-
-
-
-
-
+    fun deleteTask(task: Task) = viewModelScope.launch(Dispatchers.IO) {
+        deleteTaskUC.deleteTask(task.id)
+    }
 
 
 }

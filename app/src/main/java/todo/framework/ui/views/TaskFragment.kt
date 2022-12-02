@@ -3,6 +3,7 @@ package todo.framework.ui.views
 import android.os.Bundle
 import android.view.View
 import android.widget.Spinner
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,6 +15,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.todo.NavGraphDirections
 import com.example.todo.R
 import com.example.todo.databinding.TaskPageBinding
 import com.google.android.material.snackbar.Snackbar
@@ -23,6 +25,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import todo.domain.ResponseState
+import todo.framework.Task
 import todo.framework.ui.adapters.TaskAdapter
 import todo.framework.ui.viewmodels.TaskViewModel
 
@@ -58,11 +61,19 @@ class TaskFragment: Fragment(R.layout.task_page) {
 
 
         val linearLayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
-         adapter = TaskAdapter()
+         adapter = TaskAdapter { task->
+             passParameters(task)
+         }
         recyclerView.adapter = adapter
 
         recyclerView.layoutManager = linearLayoutManager
 
+    }
+
+    private fun passParameters(task: Task) {
+        val bundle = Bundle()
+        bundle.putParcelable(AddTaskBottomSheet.TASK,task)
+        navController.navigate(R.id.addTaskBottomSheet,bundle)
     }
 
     private fun searchTask(query: String?) {
@@ -102,7 +113,6 @@ class TaskFragment: Fragment(R.layout.task_page) {
     }
     private fun setupScreen(){
         lifecycleScope.launch {
-
             viewModel.listaTask.collect { responseState ->
                 when (responseState) {
                     is ResponseState.Success -> {
@@ -113,22 +123,16 @@ class TaskFragment: Fragment(R.layout.task_page) {
                             }
                         }
                     }
-
                     is ResponseState.Error -> {
                         binding.swipe.isRefreshing = false
-                        binding.ivNetworkError.visibility = View.VISIBLE
-
                     }
 
                     is ResponseState.Loading -> {
                         binding.swipe.isRefreshing = true
                     }
-
                 }
             }
-
         }
-
     }
 
     private fun swipeRecyclerViewToDelete(){

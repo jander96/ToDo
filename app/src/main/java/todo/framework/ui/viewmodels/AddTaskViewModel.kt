@@ -12,13 +12,16 @@ import todo.domain.DueDomain
 import todo.domain.ResponseState
 import todo.domain.usescases.CreateNewTaskUC
 import todo.domain.usescases.GetProjectByIdUC
+import todo.domain.usescases.UpdatePersonalLabelByIdUC
+import todo.domain.usescases.UpdateTaskUC
 import todo.framework.Task
 import javax.inject.Inject
 
 @HiltViewModel
 class AddTaskViewModel
 @Inject constructor(
-    private val createNewTaskUC: CreateNewTaskUC
+    private val createNewTaskUC: CreateNewTaskUC,
+    private val updateTaskUC: UpdateTaskUC
 ) :
     ViewModel() {
 
@@ -46,9 +49,17 @@ class AddTaskViewModel
 
 
 
-    suspend fun createTask(task: Task) {
-        val response = createNewTaskUC.creteNewTask(task)
-        _responseState.value= response
+    suspend fun createTask(task: Task):ResponseState<Task?> {
+        return if(task.id == ""){
+            val response = createNewTaskUC.creteNewTask(task)
+            _responseState.value= response
+            response
+        }else{
+            val response = updateTaskUC.updateTask(task)
+            _responseState.value= response
+            response
+        }
+
 
     }
 
