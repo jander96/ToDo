@@ -1,6 +1,7 @@
 package todo.framework.ui.views
 
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -36,6 +37,18 @@ class ProjectFragment : Fragment(R.layout.inbox_page) {
     lateinit var database: TodoDataBase
     private val viewModel: ProjectViewModel by viewModels()
     private lateinit var adapter: ProjectHomeAdapter
+    companion object{
+        const val PREFNAME = "user_data_pref"
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val username = arguments?.getString(LoginFragment.USERNAME)
+        val pref = requireContext().getSharedPreferences(PREFNAME,Context.MODE_PRIVATE).edit()
+        pref.putString("user",username)
+        pref.apply()
+
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,8 +61,9 @@ class ProjectFragment : Fragment(R.layout.inbox_page) {
         setupSwipeRefresh()
     }
     private fun setupToolbar() {
+
         val appBarConfiguration =
-            AppBarConfiguration(setOf(R.id.inboxFragment, R.id.taskFragment, R.id.labelFragment))
+            AppBarConfiguration(setOf(R.id.loginFragment,R.id.inboxFragment, R.id.taskFragment, R.id.labelFragment))
 
         binding.collapsingToolbar.setupWithNavController(
             binding.toolbar,

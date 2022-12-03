@@ -30,7 +30,7 @@ class AddTaskViewModel
     val responseState:StateFlow<ResponseState<Task?>> get()= _responseState
 
     fun onDateSelected(year: Int, month: Int, day: Int): String {
-        return "$year-$month-$day"
+        return "$year-${month+1}-$day"
     }
 
     fun onTimeSelected(hour: Int, minutes: Int): String {

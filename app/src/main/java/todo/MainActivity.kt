@@ -61,9 +61,13 @@ class MainActivity : AppCompatActivity() {
           setUpBottomSheet()
        }
         val listener = NavController.OnDestinationChangedListener{ controller,destination,arguments ->
-            if(destination.id == R.id.taskByProjectFragment){
-                hideBottomNavigation()
-            }else showBottomNavigation()
+            when (destination.id) {
+                R.id.taskByProjectFragment -> {
+                    hideBottomNavigation()
+                }
+                R.id.loginFragment->{hideBottomNavigation()}
+                else -> showBottomNavigation()
+            }
         }
         navController.addOnDestinationChangedListener(listener)
 

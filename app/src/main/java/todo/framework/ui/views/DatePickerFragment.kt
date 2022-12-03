@@ -20,6 +20,6 @@ class DatePickerFragment (val listener: (year: Int, month: Int, day: Int) -> Uni
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
 
-        return DatePickerDialog(requireContext(), this, year, (month+1), day)
+        return DatePickerDialog(requireContext(), this, year, month, day)
     }
 }

@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/inboxFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/inboxFragment"
@@ -77,5 +77,15 @@
             android:defaultValue="@null" />
     </dialog>
     <action android:id="@+id/action_global_addTaskBottomSheet" app:destination="@id/addTaskBottomSheet"/>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="todo.framework.ui.views.LoginFragment"
+        android:label="LoginFragment" />
+    <action
+        android:id="@+id/action_global_inboxFragment"
+        app:destination="@id/inboxFragment"
+        app:launchSingleTop="true"
+        app:popUpTo="@id/nav_graph"
+        app:popUpToInclusive="true" />
 
 </navigation>

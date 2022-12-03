@@ -53,5 +53,4 @@ private object DiffUtilCallback : DiffUtil.ItemCallback<Task>() {
         return (oldItem == newItem)
     }
 
-
 }

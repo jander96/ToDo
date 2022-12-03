@@ -153,6 +153,9 @@ class TaskFragment: Fragment(R.layout.task_page) {
                 val task = adapter.currentList[position]
                 viewModel.deleteTask(task)
                 Snackbar.make(binding.root,"Successfully delete task", Snackbar.LENGTH_SHORT).apply{
+                    setAction("Undo"){
+
+                    }
                     show()
                 }
             }

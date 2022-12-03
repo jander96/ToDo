@@ -5,12 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavArgs
-import androidx.navigation.fragment.navArgs
 import com.example.todo.R
 import com.example.todo.databinding.CreateTaskBottonSheetBinding
 
@@ -19,7 +16,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import todo.domain.ResponseState
 import todo.framework.Task
 import todo.framework.ui.viewmodels.AddTaskViewModel
 import javax.inject.Inject
@@ -37,7 +33,7 @@ class AddTaskBottomSheet @Inject constructor() : BottomSheetDialogFragment() {
     private val viewModel: AddTaskViewModel by viewModels()
     private var id: String = ""
     private var date: String? = null
-    private var dateTime: String? = null
+    private var time: String? = null
     private var labelList: Array<String>? = null
     private var projectId: String? = null
     private var task: Task? = null
@@ -47,13 +43,23 @@ class AddTaskBottomSheet @Inject constructor() : BottomSheetDialogFragment() {
         date = viewModel.onDateSelected(year, moth, day)
     }
     private val timePicker = TimePickerFragment { hour, minutes ->
-        dateTime = viewModel.onTimeSelected(hour, minutes)
+        time = viewModel.onTimeSelected(hour, minutes)
     }
     private val labelsPickerBottomSheet = LabelsPickerBottomSheet { labelNamePicked ->
         labelList = viewModel.onLabelSelected(labelNamePicked)
     }
     private val projectPickerBottomSheet = ProjectPickerBottomSheet { projectIdPicked ->
         projectId = viewModel.onProjectSelected(projectIdPicked)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        task = if (Build.VERSION.SDK_INT >= 33) {
+            arguments?.getParcelable(TASK, Task::class.java)
+        } else {
+            arguments?.getParcelable<Task>(TASK)
+        }
+
     }
 
 
@@ -69,12 +75,6 @@ class AddTaskBottomSheet @Inject constructor() : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = CreateTaskBottonSheetBinding.bind(view)
-        task = if (Build.VERSION.SDK_INT >= 33) {
-            arguments?.getParcelable(TASK, Task::class.java)
-        } else {
-            arguments?.getParcelable<Task>(TASK)
-        }
-
 
         fill()
 
@@ -128,7 +128,7 @@ class AddTaskBottomSheet @Inject constructor() : BottomSheetDialogFragment() {
         binding.etTaskDescription.setText("")
         id = ""
         date = null
-        dateTime = null
+        time = null
         labelList = null
         projectId = null
 
@@ -144,7 +144,7 @@ class AddTaskBottomSheet @Inject constructor() : BottomSheetDialogFragment() {
             if (binding.etTaskDescription.text.toString() != "") binding.etTaskDescription.text.toString()
             else task?.description ?: ""
         val date = date ?: task?.date
-        val dateTime = dateTime ?: task?.datetime
+        val dateTime = if(date != null && time != null ) date+time else time ?: task?.datetime
         val labels = labelList ?: task?.labels
         val projectId = projectId ?: task?.projectId
 

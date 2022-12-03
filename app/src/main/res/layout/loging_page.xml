@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/authLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgound_logging">
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:background="@color/background_page">
     <TextView
         android:id="@+id/txt_hello"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="92dp"
+        android:layout_marginTop="80dp"
         android:text="@string/hello__string"
         android:textColor="@color/hello__color"
         android:textSize="24sp"
@@ -19,18 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_wellcome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:gravity="center"
-        android:text="@string/title_ek1_string"
-        android:textColor="@color/hello__color"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txt_hello" />
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layout_input_username"
@@ -48,13 +37,15 @@
         app:boxCornerRadiusTopStart="15dp"
         app:layout_constraintCircleRadius="15dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_wellcome">
+        app:layout_constraintTop_toBottomOf="@+id/txt_hello">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:inputType="textEmailAddress"
             android:id="@+id/et_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/et_loging_backgroud"/>
+            android:imeOptions="actionNext"
+            />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -79,35 +70,49 @@
             android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/et_loging_backgroud"
-            />
+            android:inputType="textPassword"
+            android:imeOptions="actionDone"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/appCompatButton"
+        android:id="@+id/bnt_register"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="56dp"
         android:background="@drawable/_bg__loging_ek2_shape"
+        android:text="Register"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/layout_input_password"
+        app:layout_constraintBottom_toTopOf="@id/bnt_loging"
+        app:layout_constraintStart_toStartOf="@id/layout_input_password"
+        app:layout_constraintEnd_toEndOf="@id/layout_input_password"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/bnt_loging"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/background_ingresar"
         android:text="@string/sing_in_string"
         android:textAllCaps="false"
         android:textSize="18sp"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/layout_input_password"
         app:layout_constraintStart_toStartOf="@+id/layout_input_password"
-        app:layout_constraintTop_toBottomOf="@id/layout_input_password" />
+        app:layout_constraintTop_toBottomOf="@id/bnt_register" />
 
     <TextView
         android:id="@+id/tv_continue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="48dp"
         android:text="@string/or_continue_with_string"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appCompatButton" />
+        app:layout_constraintTop_toBottomOf="@+id/bnt_loging" />
 
     <View
         android:layout_width="0dp"
@@ -117,7 +122,7 @@
         android:background="@drawable/line_1"
         app:layout_constraintBottom_toBottomOf="@+id/tv_continue"
         app:layout_constraintEnd_toStartOf="@+id/tv_continue"
-        app:layout_constraintStart_toStartOf="@+id/appCompatButton"
+        app:layout_constraintStart_toStartOf="@+id/bnt_loging"
         app:layout_constraintTop_toTopOf="@+id/tv_continue" />
 
     <View
@@ -127,7 +132,7 @@
         android:layout_marginEnd="16dp"
         android:background="@drawable/line_1"
         app:layout_constraintBottom_toBottomOf="@+id/tv_continue"
-        app:layout_constraintEnd_toEndOf="@+id/appCompatButton"
+        app:layout_constraintEnd_toEndOf="@+id/bnt_loging"
         app:layout_constraintStart_toEndOf="@id/tv_continue"
         app:layout_constraintTop_toTopOf="@+id/tv_continue" />
 
@@ -165,8 +170,7 @@
         android:text="@string/not_a_member__register_now_string"
         app:layout_constraintEnd_toEndOf="@+id/layout_social_buttons"
         app:layout_constraintStart_toStartOf="@+id/layout_social_buttons"
-        app:layout_constraintTop_toBottomOf="@id/layout_social_buttons"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/layout_social_buttons" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+
