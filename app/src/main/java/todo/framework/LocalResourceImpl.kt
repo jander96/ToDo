@@ -4,9 +4,8 @@ import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import todo.domain.LabelDomain
-import todo.domain.LocalResource
+import todo.data.LocalResource
 import todo.domain.ProjectDomain
-import todo.domain.ResponseState
 import todo.domain.TaskDomain
 import todo.framework.room.TodoDataBase
 import todo.framework.room.entities.TaskEntity

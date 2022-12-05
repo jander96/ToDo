@@ -2,7 +2,7 @@ package todo.framework
 
 
 import todo.domain.LabelDomain
-import todo.domain.NetworkResources
+import todo.data.NetworkResources
 import todo.domain.ProjectDomain
 import todo.domain.ResponseState
 import todo.domain.TaskDomain

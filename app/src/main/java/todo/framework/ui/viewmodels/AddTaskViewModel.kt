@@ -45,10 +45,6 @@ class AddTaskViewModel
         return projectIdPicked
     }
 
-
-
-
-
     suspend fun createTask(task: Task):ResponseState<Task?> {
         return if(task.id == ""){
             val response = createNewTaskUC.creteNewTask(task)

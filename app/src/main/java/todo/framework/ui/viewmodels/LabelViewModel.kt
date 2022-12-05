@@ -45,6 +45,21 @@ class LabelViewModel @Inject constructor(
         getListOfAllProjects()
         updateResponse()
     }
+    fun deleteChild(groupPosition: Int?, childName : String?)= viewModelScope.launch(Dispatchers.IO){
+
+
+        if(groupPosition != null && childName!= null){
+            if(groupPosition == 0){
+                val projectId = findProjectByNameUC.findProjectIdByName(childName)
+                deleteProjectUC.deleteProject(projectId)
+            }
+            if(groupPosition == 1){
+                val labelId = findLabelIdByNameUC.findLabelIdByName(childName)
+                deletePersonalLabelUC.deletePersonalLabel(labelId)
+            }
+
+        }
+    }
 
     private fun getListOfAlllabels() = viewModelScope.launch(Dispatchers.IO) {
 
@@ -66,23 +81,7 @@ class LabelViewModel @Inject constructor(
         _responseState.value = response
     }
 
-    fun deleteChild(groupPosition: Int?, childName : String?)= viewModelScope.launch(Dispatchers.IO){
 
-
-        if(groupPosition != null && childName!= null){
-            if(groupPosition == 0){
-                Log.d("Delete","Se esta borrando un projecto")
-               val projectId = findProjectByNameUC.findProjectIdByName(childName)
-                deleteProjectUC.deleteProject(projectId)
-            }
-            if(groupPosition == 1){
-                Log.d("Delete","Se esta borrando una label ")
-                val labelId = findLabelIdByNameUC.findLabelIdByName(childName)
-                deletePersonalLabelUC.deletePersonalLabel(labelId)
-            }
-
-        }
-    }
 
 
 }

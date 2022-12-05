@@ -39,7 +39,9 @@ class ProjectViewModel
         getAllLabels()
 
     }
-
+    fun deleteProject(project :Project)= viewModelScope.launch(Dispatchers.IO){
+        deleteProjectUC.deleteProject(project.id)
+    }
     fun getAllProjects() = viewModelScope.launch(Dispatchers.IO) {
         _listOfAllProjects.value = ResponseState.Loading()
         _listOfAllProjects.value = getAllProjectUC.getAllProjects()
@@ -51,9 +53,6 @@ class ProjectViewModel
         getAllPersonalLabelsUC.getAllPersonalLabels()
     }
 
-    fun deleteProject(project :Project)= viewModelScope.launch(Dispatchers.IO){
-       deleteProjectUC.deleteProject(project.id)
 
-    }
 
 }

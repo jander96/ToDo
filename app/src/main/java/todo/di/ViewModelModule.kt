@@ -8,8 +8,8 @@ import dagger.hilt.android.scopes.ViewModelScoped
 import todo.data.RepoLabelsImpl
 import todo.data.RepoProjectsImpl
 import todo.data.RepoTaskImpl
-import todo.domain.LocalResource
-import todo.domain.NetworkResources
+import todo.data.LocalResource
+import todo.data.NetworkResources
 import todo.domain.RepoLabels
 import todo.domain.RepoProjects
 import todo.domain.RepoTask

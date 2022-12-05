@@ -1,6 +1,9 @@
-package todo.domain
+package todo.data
 
 import kotlinx.coroutines.flow.Flow
+import todo.domain.LabelDomain
+import todo.domain.ProjectDomain
+import todo.domain.TaskDomain
 import todo.framework.room.entities.TaskEntity
 
 interface LocalResource {
@@ -29,7 +32,7 @@ interface LocalResource {
     suspend fun createNewTask(task: TaskDomain)
 
 
-    suspend fun getAnActiveTaskById(idTask :String):TaskDomain
+    suspend fun getAnActiveTaskById(idTask :String): TaskDomain
 
 
     suspend fun updateTask( idTask: String, task: TaskDomain)

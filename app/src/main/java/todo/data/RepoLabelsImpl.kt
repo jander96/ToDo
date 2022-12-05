@@ -2,8 +2,6 @@ package todo.data
 
 import kotlinx.coroutines.flow.Flow
 import todo.domain.LabelDomain
-import todo.domain.LocalResource
-import todo.domain.NetworkResources
 import todo.domain.RepoLabels
 import todo.domain.ResponseState
 import javax.inject.Inject

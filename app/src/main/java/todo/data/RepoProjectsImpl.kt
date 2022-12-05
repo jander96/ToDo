@@ -1,8 +1,6 @@
 package todo.data
 
 import kotlinx.coroutines.flow.Flow
-import todo.domain.LocalResource
-import todo.domain.NetworkResources
 import todo.domain.ProjectDomain
 import todo.domain.RepoProjects
 import todo.domain.ResponseState
