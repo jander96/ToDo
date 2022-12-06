@@ -10,6 +10,8 @@ import com.example.todo.R
 import com.example.todo.databinding.LogingPageBinding
 import com.example.todo.databinding.SettingsPageBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class SettingsFragment:Fragment(R.layout.settings_page) {
     private var _binding: SettingsPageBinding? = null
@@ -24,7 +26,7 @@ class SettingsFragment:Fragment(R.layout.settings_page) {
              val pref = requireContext().getSharedPreferences(ProjectFragment.PREFNAME,Context.MODE_PRIVATE).edit()
             pref.clear()
             pref.apply()
-            FirebaseAuth.getInstance().signOut()
+            Firebase.auth.signOut()
            navController.navigate(R.id.loginFragment)
         }
     }
